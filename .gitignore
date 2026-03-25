@@ -42,3 +42,6 @@ next-env.d.ts
 
 # temporary scaffolding workspace
 temp-next-app/
+
+# generated Prisma client
+/prisma/generated

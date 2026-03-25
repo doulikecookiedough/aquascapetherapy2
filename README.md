@@ -9,6 +9,7 @@ This project is being built incrementally with Codex as a collaborative coding a
 - Learn TypeScript deeply through a real project
 - Build a public aquarium portfolio site
 - Build a logged-in aquarium tracking app
+- Create a ChatGPT-like aquascaping assistant grounded in my design philosophy and approach to aquascaping
 - Practice full-stack development with a modern TypeScript stack
 - Deploy the project when the core features are complete
 - Build with a documented, incremental workflow that can be reviewed through git history

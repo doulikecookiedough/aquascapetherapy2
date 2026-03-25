@@ -2,6 +2,8 @@
 
 A full-stack TypeScript project for documenting aquarium contest entries, teaching aquarium keeping, and building a production-quality portfolio app.
 
+This project is being built incrementally with Codex as a collaborative coding and learning assistant, with an emphasis on understanding the stack rather than only generating code quickly.
+
 ## Goals
 
 - Learn TypeScript deeply through a real project
@@ -9,6 +11,7 @@ A full-stack TypeScript project for documenting aquarium contest entries, teachi
 - Build a logged-in aquarium tracking app
 - Practice full-stack development with a modern TypeScript stack
 - Deploy the project when the core features are complete
+- Build with a documented, incremental workflow that can be reviewed through git history
 
 ## Planned Stack
 
@@ -29,6 +32,7 @@ Current baseline:
 - Prisma 7 configured with an initial `Tank` model
 - First database migration applied
 - Vitest is set up for route and component tests
+- Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
 ## Build From Scratch
 
@@ -171,3 +175,9 @@ This project will combine two connected areas:
 
 - A public-facing aquarium and personal portfolio website
 - A logged-in aquarium management app for tanks, water tests, maintenance logs, and journal entries
+
+## Development Approach
+
+- Build the project incrementally rather than scaffolding everything at once
+- Use Codex as a coding partner to explain architecture, TypeScript, testing, Prisma, and full-stack concepts along the way
+- Keep changes small and commit-friendly so the repository history reflects the learning process

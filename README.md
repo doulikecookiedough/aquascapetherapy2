@@ -25,7 +25,13 @@ A full-stack TypeScript project for documenting aquarium contest entries, teachi
 
 Copy `.env.example` to `.env`.
 
-### 2. Start PostgreSQL with Docker
+### 2. Install application dependencies
+
+```bash
+npm install
+```
+
+### 3. Start PostgreSQL with Docker
 
 ```bash
 docker compose up -d
@@ -33,13 +39,34 @@ docker compose up -d
 
 This starts a local PostgreSQL database on `localhost:5432`.
 
-### 3. Stop PostgreSQL
+### 4. Start the Next.js app
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:3000`.
+
+### 5. Verify the app is running
+
+Open these URLs in your browser:
+
+- `http://localhost:3000`
+- `http://localhost:3000/api/health`
+
+The health route should return:
+
+```json
+{"ok":true,"service":"aquascape-therapy"}
+```
+
+### 6. Stop PostgreSQL
 
 ```bash
 docker compose down
 ```
 
-### 4. Remove PostgreSQL data volume
+### 7. Remove PostgreSQL data volume
 
 ```bash
 docker compose down -v
@@ -47,7 +74,7 @@ docker compose down -v
 
 ## Current Milestone
 
-Set up the local PostgreSQL development environment, then scaffold the Next.js app and initial Prisma schema.
+Set up the local PostgreSQL development environment, scaffold the Next.js app, and prepare the initial Prisma schema.
 
 ## Project Direction
 

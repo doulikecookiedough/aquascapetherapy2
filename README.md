@@ -18,18 +18,29 @@ A full-stack TypeScript project for documenting aquarium contest entries, teachi
 - Prisma
 - Tailwind CSS
 - Docker for local PostgreSQL
+- Vitest + Testing Library
 
-## Local Development
+## Project Status
 
-### 1. Create your environment file
+Current baseline:
 
-Copy `.env.example` to `.env`.
+- Next.js app scaffolded
+- Local PostgreSQL runs through Docker Compose
+- Prisma 7 configured with an initial `Tank` model
+- First database migration applied
+- Vitest is set up for route and component tests
 
-### 2. Install application dependencies
+## Build From Scratch
+
+### 1. Install application dependencies
 
 ```bash
 npm install
 ```
+
+### 2. Create your environment file
+
+Copy `.env.example` to `.env`.
 
 ### 3. Start PostgreSQL with Docker
 
@@ -39,7 +50,35 @@ docker compose up -d
 
 This starts a local PostgreSQL database on `localhost:5432`.
 
-### 4. Start the Next.js app
+### 4. Apply the Prisma migrations
+
+```bash
+npm run prisma:migrate
+```
+
+This creates or updates the database schema from the migration history in `prisma/migrations/`.
+
+### 5. Generate the Prisma client
+
+```bash
+npm run prisma:generate
+```
+
+Prisma Client is generated into `prisma/generated/`.
+
+### 6. Run the test suite
+
+```bash
+npm test
+```
+
+For watch mode during development:
+
+```bash
+npm run test:watch
+```
+
+### 7. Start the Next.js app
 
 ```bash
 npm run dev
@@ -47,7 +86,7 @@ npm run dev
 
 The app will be available at `http://localhost:3000`.
 
-### 5. Verify the app is running
+### 8. Verify the app is running
 
 Open these URLs in your browser:
 
@@ -60,21 +99,71 @@ The health route should return:
 {"ok":true,"service":"aquascape-therapy"}
 ```
 
-### 6. Stop PostgreSQL
+### 9. Lint the codebase
+
+```bash
+npm run lint
+```
+
+### 10. Stop PostgreSQL
 
 ```bash
 docker compose down
 ```
 
-### 7. Remove PostgreSQL data volume
+### 11. Remove PostgreSQL data volume
 
 ```bash
 docker compose down -v
 ```
 
-## Current Milestone
+## Available Scripts
 
-Set up the local PostgreSQL development environment, scaffold the Next.js app, and prepare the initial Prisma schema.
+- `npm run dev` starts the Next.js development server
+- `npm run build` builds the app for production
+- `npm run start` runs the production build
+- `npm run lint` runs ESLint
+- `npm run prisma:migrate` applies local Prisma migrations in development
+- `npm run prisma:generate` regenerates the Prisma client
+- `npm test` runs the test suite once
+- `npm run test:watch` runs Vitest in watch mode
+
+## Testing
+
+Current automated coverage includes:
+
+- health route test
+- homepage component render test
+- tanks page component render test
+
+Testing tools in use:
+
+- Vitest
+- React Testing Library
+- `jest-dom`
+- `jsdom`
+
+## Prisma
+
+Prisma is configured with:
+
+- schema file at `prisma/schema.prisma`
+- Prisma 7 config at `prisma.config.ts`
+- generated client output at `prisma/generated/`
+- migration history at `prisma/migrations/`
+
+The initial model is:
+
+- `Tank`
+
+The first migration creates the `Tank` table with:
+
+- `id`
+- `name`
+- `volumeLiters`
+- `description`
+- `createdAt`
+- `updatedAt`
 
 ## Project Direction
 

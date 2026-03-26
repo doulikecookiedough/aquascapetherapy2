@@ -1,2 +1,7 @@
-import "dotenv/config";
+import { config } from "dotenv";
 import "@testing-library/jest-dom/vitest";
+
+config({
+  path: ".env.test",
+  override: true,
+});

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:test": "node scripts/prisma-migrate-test.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

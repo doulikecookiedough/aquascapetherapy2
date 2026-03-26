@@ -1,12 +1,16 @@
 /* @vitest-environment node */
 
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { prisma } from "@/lib/db";
 import { listTanks } from "@/server/queries/tanks";
 
 describe("listTanks", () => {
   beforeEach(async () => {
+    await prisma.tank.deleteMany();
+  });
+
+  afterEach(async () => {
     await prisma.tank.deleteMany();
   });
 

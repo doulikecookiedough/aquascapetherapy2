@@ -34,6 +34,7 @@ Current baseline:
 - First database migration applied
 - A shared Prisma client wrapper and first tank query module are in place
 - Vitest is set up for route, component, and database integration tests
+- Integration tests use a dedicated Prisma test schema so test data stays separate from development data
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
 ## Build From Scratch
@@ -75,10 +76,13 @@ Prisma Client is generated into `prisma/generated/`.
 ### 6. Run the test suite
 
 ```bash
+npm run prisma:migrate:test
 npm test
 ```
 
 The local PostgreSQL container must be running before the test suite will pass, because the suite now includes a Prisma-backed integration test for tank queries.
+
+The test suite uses the same PostgreSQL instance as local development, but points Prisma at a separate `test` schema so integration test data does not affect the main development schema.
 
 For watch mode during development:
 
@@ -132,6 +136,7 @@ docker compose down -v
 - `npm run start` runs the production build
 - `npm run lint` runs ESLint
 - `npm run prisma:migrate` applies local Prisma migrations in development
+- `npm run prisma:migrate:test` applies the same Prisma migrations to the test schema
 - `npm run prisma:generate` regenerates the Prisma client
 - `npm test` runs the test suite once
 - `npm run test:watch` runs Vitest in watch mode
@@ -155,8 +160,14 @@ Testing tools in use:
 The integration test suite expects:
 
 - `.env` to exist with `DATABASE_URL`
+- `.env.test` to exist with a Prisma test-schema `DATABASE_URL`
 - local PostgreSQL to be running
-- Prisma migrations to have been applied
+- Prisma migrations to have been applied to both the development schema and the test schema
+
+Integration test data is isolated by using:
+
+- development schema: `public`
+- test schema: `test`
 
 ## Prisma
 
@@ -168,6 +179,12 @@ Prisma is configured with:
 - first server query module at `server/queries/tanks.ts`
 - generated client output at `prisma/generated/`
 - migration history at `prisma/migrations/`
+
+Test database support includes:
+
+- `.env.test` and `.env.test.example`
+- a dedicated test-schema migration command
+- integration tests that run against the `test` schema instead of `public`
 
 The initial model is:
 

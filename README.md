@@ -32,7 +32,8 @@ Current baseline:
 - Local PostgreSQL runs through Docker Compose
 - Prisma 7 configured with an initial `Tank` model
 - First database migration applied
-- Vitest is set up for route and component tests
+- A shared Prisma client wrapper and first tank query module are in place
+- Vitest is set up for route, component, and database integration tests
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
 ## Build From Scratch
@@ -76,6 +77,8 @@ Prisma Client is generated into `prisma/generated/`.
 ```bash
 npm test
 ```
+
+The local PostgreSQL container must be running before the test suite will pass, because the suite now includes a Prisma-backed integration test for tank queries.
 
 For watch mode during development:
 
@@ -140,6 +143,7 @@ Current automated coverage includes:
 - health route test
 - homepage component render test
 - tanks page component render test
+- tank query integration test
 
 Testing tools in use:
 
@@ -148,12 +152,20 @@ Testing tools in use:
 - `jest-dom`
 - `jsdom`
 
+The integration test suite expects:
+
+- `.env` to exist with `DATABASE_URL`
+- local PostgreSQL to be running
+- Prisma migrations to have been applied
+
 ## Prisma
 
 Prisma is configured with:
 
 - schema file at `prisma/schema.prisma`
 - Prisma 7 config at `prisma.config.ts`
+- shared Prisma client wrapper at `lib/db.ts`
+- first server query module at `server/queries/tanks.ts`
 - generated client output at `prisma/generated/`
 - migration history at `prisma/migrations/`
 

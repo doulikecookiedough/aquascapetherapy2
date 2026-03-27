@@ -6,22 +6,25 @@ export const createTankSchema = z.object({
     .trim()
     .min(1, "Tank name is required.")
     .max(100, "Tank name must be 100 characters or fewer."),
-  volumeLiters: z
+  lengthCm: z
     .number()
-    .int("Tank volume must be a whole number.")
-    .positive("Tank volume must be greater than zero."),
-  description: z
-    .string()
-    .trim()
-    .max(500, "Description must be 500 characters or fewer.")
-    .optional()
-    .transform((value) => (value && value.length > 0 ? value : undefined)),
+    .int("Tank length must be a whole number.")
+    .positive("Tank length must be greater than zero."),
+  widthCm: z
+    .number()
+    .int("Tank width must be a whole number.")
+    .positive("Tank width must be greater than zero."),
+  heightCm: z
+    .number()
+    .int("Tank height must be a whole number.")
+    .positive("Tank height must be greater than zero."),
 });
 
 const createTankFormSchema = z.object({
   name: z.string(),
-  volumeLiters: z.coerce.number(),
-  description: z.string().optional(),
+  lengthCm: z.coerce.number(),
+  widthCm: z.coerce.number(),
+  heightCm: z.coerce.number(),
 });
 
 export type CreateTankInput = z.infer<typeof createTankSchema>;
@@ -29,8 +32,9 @@ export type CreateTankInput = z.infer<typeof createTankSchema>;
 export function parseCreateTankFormData(formData: FormData): CreateTankInput {
   const rawInput = createTankFormSchema.parse({
     name: formData.get("name"),
-    volumeLiters: formData.get("volumeLiters"),
-    description: formData.get("description"),
+    lengthCm: formData.get("lengthCm"),
+    widthCm: formData.get("widthCm"),
+    heightCm: formData.get("heightCm"),
   });
 
   return createTankSchema.parse(rawInput);

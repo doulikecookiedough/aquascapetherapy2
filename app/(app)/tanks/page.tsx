@@ -1,4 +1,8 @@
 import { createTankAction } from "@/app/(app)/tanks/actions";
+import {
+  calculateTankVolumeGallons,
+  calculateTankVolumeLiters,
+} from "@/lib/tank-math";
 import { listTanks } from "@/server/queries/tanks";
 
 export default async function TanksPage() {
@@ -43,24 +47,41 @@ export default async function TanksPage() {
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm font-medium">Volume (Liters)</span>
+              <span className="text-sm font-medium">Length (cm)</span>
               <input
                 className="rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
                 type="number"
-                name="volumeLiters"
+                name="lengthCm"
                 min="1"
                 step="1"
-                placeholder="180"
+                placeholder="90"
                 required
               />
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm font-medium">Description</span>
-              <textarea
-                className="min-h-28 rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
-                name="description"
-                placeholder="A larger display aquarium focused on plant growth and hardscape balance."
+              <span className="text-sm font-medium">Width (cm)</span>
+              <input
+                className="rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
+                type="number"
+                name="widthCm"
+                min="1"
+                step="1"
+                placeholder="45"
+                required
+              />
+            </label>
+
+            <label className="grid gap-2">
+              <span className="text-sm font-medium">Height (cm)</span>
+              <input
+                className="rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
+                type="number"
+                name="heightCm"
+                min="1"
+                step="1"
+                placeholder="45"
+                required
               />
             </label>
 
@@ -95,15 +116,28 @@ export default async function TanksPage() {
         ) : (
           <div className="grid gap-4">
             {tanks.map((tank) => (
-              <article
-                key={tank.id}
-                className="rounded-3xl bg-surface p-6 shadow-sm ring-1 ring-black/5"
-              >
+              <article key={tank.id} className="rounded-3xl bg-surface p-6 shadow-sm ring-1 ring-black/5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-2">
                     <h3 className="text-xl font-semibold">{tank.name}</h3>
+                    <p className="text-sm leading-7 text-muted">
+                      {tank.lengthCm} x {tank.widthCm} x {tank.heightCm} cm
+                    </p>
                     <p className="text-sm text-muted">
-                      {tank.volumeLiters} liters
+                      {calculateTankVolumeLiters(
+                        tank.lengthCm,
+                        tank.widthCm,
+                        tank.heightCm,
+                      )}{" "}
+                      liters /{" "}
+                      {calculateTankVolumeGallons(
+                        calculateTankVolumeLiters(
+                          tank.lengthCm,
+                          tank.widthCm,
+                          tank.heightCm,
+                        ),
+                      )}{" "}
+                      gallons
                     </p>
                   </div>
                   <p className="text-xs uppercase tracking-[0.2em] text-accent">
@@ -111,11 +145,27 @@ export default async function TanksPage() {
                   </p>
                 </div>
 
-                {tank.description ? (
-                  <p className="mt-4 text-sm leading-7 text-muted">
-                    {tank.description}
+                <div className="mt-4 rounded-2xl bg-accent-soft/60 p-4">
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                    Latest Aquascape
                   </p>
-                ) : null}
+                  {tank.aquascapes[0] ? (
+                    <div className="mt-2 space-y-2">
+                      <h4 className="text-base font-semibold">
+                        {tank.aquascapes[0].name}
+                      </h4>
+                      {tank.aquascapes[0].description ? (
+                        <p className="text-sm leading-7 text-muted">
+                          {tank.aquascapes[0].description}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-sm leading-7 text-muted">
+                      No aquascapes have been added to this tank yet.
+                    </p>
+                  )}
+                </div>
               </article>
             ))}
           </div>

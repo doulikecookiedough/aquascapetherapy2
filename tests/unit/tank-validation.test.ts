@@ -5,33 +5,26 @@ import { createTankSchema, parseCreateTankFormData } from "@/lib/validations/tan
 describe("createTankSchema", () => {
   it("accepts valid tank input", () => {
     const result = createTankSchema.parse({
-      name: "Nature Style 90P",
-      volumeLiters: 180,
-      description: "A larger display aquarium.",
+      name: "Living Room Display",
+      lengthCm: 90,
+      widthCm: 45,
+      heightCm: 45,
     });
 
     expect(result).toEqual({
-      name: "Nature Style 90P",
-      volumeLiters: 180,
-      description: "A larger display aquarium.",
+      name: "Living Room Display",
+      lengthCm: 90,
+      widthCm: 45,
+      heightCm: 45,
     });
-  });
-
-  it("normalizes an empty description to undefined", () => {
-    const result = createTankSchema.parse({
-      name: "Nano Forest",
-      volumeLiters: 45,
-      description: "   ",
-    });
-
-    expect(result.description).toBeUndefined();
   });
 
   it("rejects invalid tank input", () => {
     const result = createTankSchema.safeParse({
       name: "",
-      volumeLiters: 0,
-      description: "x".repeat(501),
+      lengthCm: 0,
+      widthCm: 0,
+      heightCm: 0,
     });
 
     expect(result.success).toBe(false);
@@ -39,16 +32,18 @@ describe("createTankSchema", () => {
 
   it("parses form data into typed tank input", () => {
     const formData = new FormData();
-    formData.set("name", "Nature Style 90P");
-    formData.set("volumeLiters", "180");
-    formData.set("description", "A larger display aquarium.");
+    formData.set("name", "Living Room Display");
+    formData.set("lengthCm", "90");
+    formData.set("widthCm", "45");
+    formData.set("heightCm", "45");
 
     const result = parseCreateTankFormData(formData);
 
     expect(result).toEqual({
-      name: "Nature Style 90P",
-      volumeLiters: 180,
-      description: "A larger display aquarium.",
+      name: "Living Room Display",
+      lengthCm: 90,
+      widthCm: 45,
+      heightCm: 45,
     });
   });
 });

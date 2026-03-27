@@ -3,35 +3,63 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { prisma } from "@/lib/db";
+import { getOrCreatePortfolioOwner } from "@/server/portfolio-owner";
 import { listTanks } from "@/server/queries/tanks";
 
 describe("listTanks", () => {
   beforeEach(async () => {
+    await prisma.aquascape.deleteMany();
     await prisma.tank.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   afterEach(async () => {
+    await prisma.aquascape.deleteMany();
     await prisma.tank.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   afterAll(async () => {
     await prisma.$disconnect();
   });
 
-  it("returns tanks ordered by newest first", async () => {
-    await prisma.tank.create({
+  it("returns only the portfolio owner's tanks ordered by newest first", async () => {
+    const owner = await getOrCreatePortfolioOwner();
+    const otherUser = await prisma.user.create({
       data: {
-        name: "Nature Style 90P",
-        volumeLiters: 180,
-        description: "A larger display aquarium.",
+        email: "guest@portfolio.local",
+        firstName: "Guest",
+        lastName: "Aquarist",
       },
     });
 
     await prisma.tank.create({
       data: {
-        name: "Nano Forest",
-        volumeLiters: 45,
-        description: "A smaller tank for focused plant growth.",
+        name: "Living Room Display",
+        lengthCm: 90,
+        widthCm: 45,
+        heightCm: 45,
+        userId: owner.id,
+      },
+    });
+
+    await prisma.tank.create({
+      data: {
+        name: "Studio Nano",
+        lengthCm: 60,
+        widthCm: 30,
+        heightCm: 36,
+        userId: owner.id,
+      },
+    });
+
+    await prisma.tank.create({
+      data: {
+        name: "Guest Tank",
+        lengthCm: 60,
+        widthCm: 30,
+        heightCm: 36,
+        userId: otherUser.id,
       },
     });
 
@@ -39,8 +67,8 @@ describe("listTanks", () => {
 
     expect(tanks).toHaveLength(2);
     expect(tanks.map((tank) => tank.name)).toEqual([
-      "Nano Forest",
-      "Nature Style 90P",
+      "Studio Nano",
+      "Living Room Display",
     ]);
   });
 });

@@ -24,10 +24,13 @@ describe("Tanks page", () => {
     expect(screen.getByRole("heading", { name: "Add a Tank" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Tank Name" })).toBeInTheDocument();
     expect(
-      screen.getByRole("spinbutton", { name: "Volume (Liters)" }),
+      screen.getByRole("spinbutton", { name: "Length (cm)" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: "Description" }),
+      screen.getByRole("spinbutton", { name: "Width (cm)" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("spinbutton", { name: "Height (cm)" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Create Tank" }),
@@ -43,19 +46,38 @@ describe("Tanks page", () => {
     vi.mocked(listTanks).mockResolvedValue([
       {
         id: "tank-1",
-        name: "Nature Style 90P",
-        volumeLiters: 180,
-        description: "A larger display aquarium.",
+        name: "Living Room Display",
+        lengthCm: 90,
+        widthCm: 45,
+        heightCm: 45,
+        isPublic: false,
+        userId: "user-1",
         createdAt: new Date("2026-03-25T12:00:00.000Z"),
         updatedAt: new Date("2026-03-25T12:00:00.000Z"),
+        aquascapes: [
+          {
+            id: "scape-1",
+            tankId: "tank-1",
+            name: "Pacific Northwest",
+            description:
+              "An aquascape inspired by the forests of the pacific northwest.",
+            isPublic: true,
+            createdAt: new Date("2026-03-26T12:00:00.000Z"),
+            updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+          },
+        ],
       },
     ]);
 
     render(await TanksPage());
 
-    expect(screen.getByText("Nature Style 90P")).toBeInTheDocument();
-    expect(screen.getByText("180 liters")).toBeInTheDocument();
-    expect(screen.getByText("A larger display aquarium.")).toBeInTheDocument();
+    expect(screen.getByText("Living Room Display")).toBeInTheDocument();
+    expect(screen.getByText("90 x 45 x 45 cm")).toBeInTheDocument();
+    expect(screen.getByText("182 liters / 48.1 gallons")).toBeInTheDocument();
+    expect(screen.getByText("Pacific Northwest")).toBeInTheDocument();
+    expect(
+      screen.getByText(/forests of the pacific northwest/i),
+    ).toBeInTheDocument();
     expect(screen.getByText("1 tank")).toBeInTheDocument();
   });
 });

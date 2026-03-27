@@ -4,14 +4,19 @@ import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { prisma } from "@/lib/db";
 import { createTank } from "@/server/mutations/tanks";
+import { getOrCreatePortfolioOwner } from "@/server/portfolio-owner";
 
 describe("createTank", () => {
   beforeEach(async () => {
+    await prisma.aquascape.deleteMany();
     await prisma.tank.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   afterEach(async () => {
+    await prisma.aquascape.deleteMany();
     await prisma.tank.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   afterAll(async () => {
@@ -19,14 +24,20 @@ describe("createTank", () => {
   });
 
   it("creates a tank record in the database", async () => {
+    const owner = await getOrCreatePortfolioOwner();
     const tank = await createTank({
-      name: "Nature Style 90P",
-      volumeLiters: 180,
-      description: "A larger display aquarium.",
+      name: "Living Room Display",
+      lengthCm: 90,
+      widthCm: 45,
+      heightCm: 45,
     });
 
-    expect(tank.name).toBe("Nature Style 90P");
-    expect(tank.volumeLiters).toBe(180);
+    expect(tank.name).toBe("Living Room Display");
+    expect(tank.lengthCm).toBe(90);
+    expect(tank.widthCm).toBe(45);
+    expect(tank.heightCm).toBe(45);
+    expect(tank.userId).toBe(owner.id);
+    expect(tank.isPublic).toBe(false);
 
     const tanks = await prisma.tank.findMany();
 
@@ -34,13 +45,14 @@ describe("createTank", () => {
     expect(tanks[0]?.id).toBe(tank.id);
   });
 
-  it("stores undefined description as null in the database", async () => {
+  it("creates tanks as private by default", async () => {
     const tank = await createTank({
-      name: "Nano Forest",
-      volumeLiters: 45,
-      description: "",
+      name: "Studio Nano",
+      lengthCm: 60,
+      widthCm: 30,
+      heightCm: 36,
     });
 
-    expect(tank.description).toBeNull();
+    expect(tank.isPublic).toBe(false);
   });
 });

@@ -44,10 +44,10 @@ export default function Home() {
 
         <div className="flex flex-col gap-4 pt-2 sm:flex-row">
           <Link
-            className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
             href="/tanks"
           >
-            View Tanks
+            <span style={{ color: "#ffffff" }}>Tanks</span>
           </Link>
           <p className="max-w-xl text-sm leading-7 text-muted">
             The tanks page is the first real full-stack slice in the app,

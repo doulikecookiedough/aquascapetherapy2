@@ -30,11 +30,11 @@ Current baseline:
 
 - Next.js app scaffolded
 - Local PostgreSQL runs through Docker Compose
-- Prisma 7 configured with `User`, `Tank`, and `Aquascape` models
+- Prisma 7 configured with a structured gallery model for users, tanks, aquascapes, images, equipment, plants, fauna, and facts
 - A shared Prisma client wrapper and ownership-aware tank query/mutation modules are in place
 - The `/tanks` page supports a real read/create/delete flow for physical tanks and previews the latest aquascape
 - Development uses a dedicated local database and integration tests use a separate local test database
-- Permanent portfolio seed data is available for the local development database
+- Permanent portfolio seed data is available for the local development database, including the first structured aquascape entry
 - Vitest is split into unit/component and database integration suites for faster feedback
 - Integration tests run against a separate PostgreSQL database so destructive cleanup does not touch seeded development data
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
@@ -190,7 +190,7 @@ Current automated coverage includes:
 - homepage component render test
 - tanks page component render test
 - tank validation test
-- tank query integration test
+- tank query integration test, including latest-aquascape nested gallery relations
 - tank mutation integration test for create and delete flows
 
 Testing tools in use:
@@ -244,13 +244,24 @@ The current data model includes:
 - `User`
 - `Tank`
 - `Aquascape`
+- `AquascapeImage`
+- `AquascapeEquipment`
+- `Plant`
+- `AquascapePlant`
+- `Fauna`
+- `AquascapeFauna`
+- `FactType`
+- `AquascapeFact`
 
 Current model direction:
 
 - a `User` can own many `Tank`s
 - a `Tank` is a physical aquarium with dimensions and visibility
 - a `Tank` can have many `Aquascape`s over time
-- an `Aquascape` represents the artistic layout and can also be public or private
+- an `Aquascape` represents the artistic layout and has structured support for images, equipment, plants, fauna, and facts
+- plants and fauna are reusable catalog records connected to aquascapes through join tables
+- aquascapes now have workflow state through `AquascapeStatus` and equipment categories through `EquipmentCategory`
+- public aquascapes are intended to require complete structured content and an approval flow later in the product
 
 Current tank-management flow:
 
@@ -265,6 +276,13 @@ The current local seed data includes:
 - a portfolio owner user
 - `ADA 150P`
 - `ADA 120P`
+- the `Pacific Northwest` aquascape on `ADA 120P`
+- structured aquascape seed content for:
+  - images
+  - equipment
+  - plants
+  - fauna
+  - facts
 
 These seeds are intended as local development and portfolio bootstrap content, not as automated test fixtures.
 

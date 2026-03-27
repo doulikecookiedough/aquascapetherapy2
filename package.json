@@ -10,6 +10,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:test": "node scripts/prisma-migrate-test.mjs",
+    "prisma:seed": "tsx scripts/prisma-seed.ts",
     "test": "npm run test:unit & npm run test:integration & wait",
     "test:watch": "vitest --config vitest.unit.config.ts",
     "test:unit": "vitest run --config vitest.unit.config.ts",
@@ -39,6 +40,7 @@
     "jsdom": "^29.0.1",
     "prisma": "^7.5.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.1"
   }

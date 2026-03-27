@@ -8,13 +8,29 @@ import { getOrCreatePortfolioOwner } from "@/server/portfolio-owner";
 
 describe("tank mutations", () => {
   beforeEach(async () => {
+    await prisma.aquascapeFact.deleteMany();
+    await prisma.aquascapeFauna.deleteMany();
+    await prisma.aquascapePlant.deleteMany();
+    await prisma.aquascapeEquipment.deleteMany();
+    await prisma.aquascapeImage.deleteMany();
     await prisma.aquascape.deleteMany();
+    await prisma.factType.deleteMany();
+    await prisma.fauna.deleteMany();
+    await prisma.plant.deleteMany();
     await prisma.tank.deleteMany();
     await prisma.user.deleteMany();
   });
 
   afterEach(async () => {
+    await prisma.aquascapeFact.deleteMany();
+    await prisma.aquascapeFauna.deleteMany();
+    await prisma.aquascapePlant.deleteMany();
+    await prisma.aquascapeEquipment.deleteMany();
+    await prisma.aquascapeImage.deleteMany();
     await prisma.aquascape.deleteMany();
+    await prisma.factType.deleteMany();
+    await prisma.fauna.deleteMany();
+    await prisma.plant.deleteMany();
     await prisma.tank.deleteMany();
     await prisma.user.deleteMany();
   });

@@ -10,6 +10,47 @@ export async function listTanks() {
     },
     include: {
       aquascapes: {
+        include: {
+          images: {
+            orderBy: [
+              {
+                isPrimary: "desc",
+              },
+              {
+                displayOrder: "asc",
+              },
+            ],
+          },
+          equipment: {
+            orderBy: {
+              displayOrder: "asc",
+            },
+          },
+          plants: {
+            include: {
+              plant: true,
+            },
+            orderBy: {
+              displayOrder: "asc",
+            },
+          },
+          fauna: {
+            include: {
+              fauna: true,
+            },
+            orderBy: {
+              displayOrder: "asc",
+            },
+          },
+          facts: {
+            include: {
+              factType: true,
+            },
+            orderBy: {
+              displayOrder: "asc",
+            },
+          },
+        },
         orderBy: {
           createdAt: "desc",
         },

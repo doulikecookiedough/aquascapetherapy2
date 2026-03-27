@@ -20,6 +20,10 @@ export const createTankSchema = z.object({
     .positive("Tank height must be greater than zero."),
 });
 
+export const deleteTankSchema = z.object({
+  tankId: z.string().cuid("Tank id is invalid."),
+});
+
 const createTankFormSchema = z.object({
   name: z.string(),
   lengthCm: z.coerce.number(),
@@ -27,7 +31,12 @@ const createTankFormSchema = z.object({
   heightCm: z.coerce.number(),
 });
 
+const deleteTankFormSchema = z.object({
+  tankId: z.string(),
+});
+
 export type CreateTankInput = z.infer<typeof createTankSchema>;
+export type DeleteTankInput = z.infer<typeof deleteTankSchema>;
 
 export function parseCreateTankFormData(formData: FormData): CreateTankInput {
   const rawInput = createTankFormSchema.parse({
@@ -38,4 +47,12 @@ export function parseCreateTankFormData(formData: FormData): CreateTankInput {
   });
 
   return createTankSchema.parse(rawInput);
+}
+
+export function parseDeleteTankFormData(formData: FormData): DeleteTankInput {
+  const rawInput = deleteTankFormSchema.parse({
+    tankId: formData.get("tankId"),
+  });
+
+  return deleteTankSchema.parse(rawInput);
 }

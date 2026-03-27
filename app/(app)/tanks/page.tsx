@@ -1,4 +1,7 @@
-import { createTankAction } from "@/app/(app)/tanks/actions";
+import {
+  createTankAction,
+  deleteTankAction,
+} from "@/app/(app)/tanks/actions";
 import {
   calculateTankVolumeGallons,
   calculateTankVolumeLiters,
@@ -116,7 +119,10 @@ export default async function TanksPage() {
         ) : (
           <div className="grid gap-4">
             {tanks.map((tank) => (
-              <article key={tank.id} className="rounded-3xl bg-surface p-6 shadow-sm ring-1 ring-black/5">
+              <article
+                key={tank.id}
+                className="rounded-3xl bg-surface p-6 shadow-sm ring-1 ring-black/5"
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-2">
                     <h3 className="text-xl font-semibold">{tank.name}</h3>
@@ -166,6 +172,16 @@ export default async function TanksPage() {
                     </p>
                   )}
                 </div>
+
+                <form action={deleteTankAction} className="mt-4">
+                  <input type="hidden" name="tankId" value={tank.id} />
+                  <button
+                    className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
+                    type="submit"
+                  >
+                    Delete Tank
+                  </button>
+                </form>
               </article>
             ))}
           </div>

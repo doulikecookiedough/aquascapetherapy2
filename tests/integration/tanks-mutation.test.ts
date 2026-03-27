@@ -3,10 +3,10 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { prisma } from "@/lib/db";
-import { createTank } from "@/server/mutations/tanks";
+import { createTank, deleteTank } from "@/server/mutations/tanks";
 import { getOrCreatePortfolioOwner } from "@/server/portfolio-owner";
 
-describe("createTank", () => {
+describe("tank mutations", () => {
   beforeEach(async () => {
     await prisma.aquascape.deleteMany();
     await prisma.tank.deleteMany();
@@ -54,5 +54,53 @@ describe("createTank", () => {
     });
 
     expect(tank.isPublic).toBe(false);
+  });
+
+  it("deletes one of the portfolio owner's tanks", async () => {
+    const tank = await createTank({
+      name: "Gallery Tank",
+      lengthCm: 120,
+      widthCm: 45,
+      heightCm: 45,
+    });
+
+    await deleteTank({
+      tankId: tank.id,
+    });
+
+    const remainingTanks = await prisma.tank.findMany();
+
+    expect(remainingTanks).toHaveLength(0);
+  });
+
+  it("does not delete a tank owned by a different user", async () => {
+    const otherUser = await prisma.user.create({
+      data: {
+        email: "guest@portfolio.local",
+        firstName: "Guest",
+        lastName: "Aquarist",
+      },
+    });
+
+    const otherTank = await prisma.tank.create({
+      data: {
+        name: "Guest Tank",
+        lengthCm: 60,
+        widthCm: 30,
+        heightCm: 36,
+        userId: otherUser.id,
+      },
+    });
+
+    await expect(
+      deleteTank({
+        tankId: otherTank.id,
+      }),
+    ).rejects.toThrow("Tank not found.");
+
+    const remainingTanks = await prisma.tank.findMany();
+
+    expect(remainingTanks).toHaveLength(1);
+    expect(remainingTanks[0]?.id).toBe(otherTank.id);
   });
 });

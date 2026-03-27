@@ -35,6 +35,9 @@ describe("Tanks page", () => {
     expect(
       screen.getByRole("button", { name: "Create Tank" }),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Delete Tank" }),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Tank Inventory" })).toBeInTheDocument();
     expect(screen.getByText("No tanks yet")).toBeInTheDocument();
     expect(
@@ -79,5 +82,8 @@ describe("Tanks page", () => {
       screen.getByText(/forests of the pacific northwest/i),
     ).toBeInTheDocument();
     expect(screen.getByText("1 tank")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Delete Tank" }),
+    ).toBeInTheDocument();
   });
 });

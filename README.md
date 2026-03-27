@@ -31,11 +31,12 @@ Current baseline:
 - Next.js app scaffolded
 - Local PostgreSQL runs through Docker Compose
 - Prisma 7 configured with `User`, `Tank`, and `Aquascape` models
-- Development and test Prisma migrations are applied
 - A shared Prisma client wrapper and ownership-aware tank query/mutation modules are in place
-- The `/tanks` page now supports a real read/write flow for physical tanks and previews the latest aquascape
+- The `/tanks` page supports a real read/write flow for physical tanks and previews the latest aquascape
+- Development uses a dedicated local database and integration tests use a separate local test database
+- Permanent portfolio seed data is available for the local development database
 - Vitest is split into unit/component and database integration suites for faster feedback
-- Integration tests use a dedicated Prisma test schema so test data stays separate from development data
+- Integration tests run against a separate PostgreSQL database so destructive cleanup does not touch seeded development data
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
 ## Build From Scratch
@@ -46,9 +47,12 @@ Current baseline:
 npm install
 ```
 
-### 2. Create your environment file
+### 2. Create your environment files
 
-Copy `.env.example` to `.env`.
+Copy:
+
+- `.env.example` to `.env`
+- `.env.test.example` to `.env.test`
 
 ### 3. Start PostgreSQL with Docker
 
@@ -66,7 +70,15 @@ npm run prisma:migrate
 
 This creates or updates the database schema from the migration history in `prisma/migrations/`.
 
-### 5. Generate the Prisma client
+### 5. Apply the test database migrations
+
+```bash
+npm run prisma:migrate:test
+```
+
+This applies the same Prisma migration history to the separate local test database.
+
+### 6. Generate the Prisma client
 
 ```bash
 npm run prisma:generate
@@ -74,16 +86,28 @@ npm run prisma:generate
 
 Prisma Client is generated into `prisma/generated/`.
 
-### 6. Run the test suite
+### 7. Seed the local development database
 
 ```bash
-npm run prisma:migrate:test
+npm run prisma:seed
+```
+
+This seeds the local development database with the portfolio owner and starter tanks so `/tanks` renders meaningful content immediately.
+
+### 8. Run the test suite
+
+```bash
 npm test
 ```
 
 The local PostgreSQL container must be running before the test suite will pass, because the suite includes Prisma-backed integration tests.
 
-The test suite uses the same PostgreSQL instance as local development, but points Prisma at a separate `test` schema so integration test data does not affect the main development schema.
+The test suite uses the same PostgreSQL container as local development, but points Prisma at a separate database:
+
+- development database: `aquascapetherapy`
+- test database: `aquascapetherapy_test`
+
+That keeps destructive integration test cleanup away from seeded development data.
 
 Helpful test commands during development:
 
@@ -99,7 +123,7 @@ npm run test:integration:watch
 - `npm run test:watch` watches the unit/component suite
 - `npm run test:integration` runs only the database-backed integration suite
 
-### 7. Start the Next.js app
+### 9. Start the Next.js app
 
 ```bash
 npm run dev
@@ -107,11 +131,12 @@ npm run dev
 
 The app will be available at `http://localhost:3000`.
 
-### 8. Verify the app is running
+### 10. Verify the app is running
 
 Open these URLs in your browser:
 
 - `http://localhost:3000`
+- `http://localhost:3000/tanks`
 - `http://localhost:3000/api/health`
 
 The health route should return:
@@ -120,19 +145,21 @@ The health route should return:
 {"ok":true,"service":"aquascape-therapy"}
 ```
 
-### 9. Lint the codebase
+You should see the portfolio seed tanks on `/tanks`.
+
+### 11. Lint the codebase
 
 ```bash
 npm run lint
 ```
 
-### 10. Stop PostgreSQL
+### 12. Stop PostgreSQL
 
 ```bash
 docker compose down
 ```
 
-### 11. Remove PostgreSQL data volume
+### 13. Remove PostgreSQL data volume
 
 ```bash
 docker compose down -v
@@ -145,7 +172,8 @@ docker compose down -v
 - `npm run start` runs the production build
 - `npm run lint` runs ESLint
 - `npm run prisma:migrate` applies local Prisma migrations in development
-- `npm run prisma:migrate:test` applies the same Prisma migrations to the test schema
+- `npm run prisma:migrate:test` applies the same Prisma migrations to the separate test database
+- `npm run prisma:seed` seeds the local development database with portfolio baseline data
 - `npm run prisma:generate` regenerates the Prisma client
 - `npm test` runs the unit and integration suites together
 - `npm run test:watch` runs the unit/component suite in watch mode
@@ -175,9 +203,9 @@ Testing tools in use:
 The integration test suite expects:
 
 - `.env` to exist with `DATABASE_URL`
-- `.env.test` to exist with a Prisma test-schema `DATABASE_URL`
+- `.env.test` to exist with a separate test-database `DATABASE_URL`
 - local PostgreSQL to be running
-- Prisma migrations to have been applied to both the development schema and the test schema
+- Prisma migrations to have been applied to both the development database and the test database
 
 The test suite is split into:
 
@@ -186,8 +214,8 @@ The test suite is split into:
 
 Integration test data is isolated by using:
 
-- development schema: `public`
-- test schema: `test`
+- development database: `aquascapetherapy`
+- test database: `aquascapetherapy_test`
 
 ## Prisma
 
@@ -199,14 +227,16 @@ Prisma is configured with:
 - query module at `server/queries/tanks.ts`
 - mutation module at `server/mutations/tanks.ts`
 - temporary portfolio owner bootstrap helper at `server/portfolio-owner.ts`
+- permanent portfolio seed data at `data/portfolio-seed.ts`
+- Prisma seed script at `scripts/prisma-seed.ts`
 - generated client output at `prisma/generated/`
 - migration history at `prisma/migrations/`
 
 Test database support includes:
 
 - `.env.test` and `.env.test.example`
-- a dedicated test-schema migration command
-- integration tests that run against the `test` schema instead of `public`
+- a dedicated test-database migration command
+- integration tests that run against `aquascapetherapy_test` instead of the development database
 
 The current data model includes:
 
@@ -220,6 +250,14 @@ Current model direction:
 - a `Tank` is a physical aquarium with dimensions and visibility
 - a `Tank` can have many `Aquascape`s over time
 - an `Aquascape` represents the artistic layout and can also be public or private
+
+The current local seed data includes:
+
+- a portfolio owner user
+- `ADA 150P`
+- `ADA 120P`
+
+These seeds are intended as local development and portfolio bootstrap content, not as automated test fixtures.
 
 ## Project Direction
 

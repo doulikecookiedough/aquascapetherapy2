@@ -1,3 +1,18 @@
+export type PortfolioAquascapeSeed = {
+  name: string;
+  description: string | null;
+  isPublic: boolean;
+};
+
+export type PortfolioTankSeed = {
+  name: string;
+  lengthCm: number;
+  widthCm: number;
+  heightCm: number;
+  isPublic: boolean;
+  aquascapes: PortfolioAquascapeSeed[];
+};
+
 export const portfolioOwnerProfile = {
   email: "dou@portfolio.local",
   firstName: "Dou",
@@ -5,7 +20,7 @@ export const portfolioOwnerProfile = {
   bio: null,
 };
 
-export const portfolioSeedTanks = [
+export const portfolioSeedTanks: PortfolioTankSeed[] = [
   {
     name: "ADA 150P",
     lengthCm: 150,

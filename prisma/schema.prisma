@@ -7,11 +7,44 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  firstName String
+  lastName  String
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tanks     Tank[]
+}
+
 model Tank {
-  id           String   @id @default(cuid())
+  id         String      @id @default(cuid())
+  name       String
+  lengthCm   Int
+  widthCm    Int
+  heightCm   Int
+  isPublic   Boolean     @default(false)
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aquascapes Aquascape[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([isPublic])
+}
+
+model Aquascape {
+  id          String   @id @default(cuid())
+  tankId       String
+  tank         Tank     @relation(fields: [tankId], references: [id], onDelete: Cascade)
   name         String
-  volumeLiters Int
   description  String?
+  isPublic     Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  @@index([tankId])
+  @@index([isPublic])
 }

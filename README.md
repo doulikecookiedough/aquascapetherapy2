@@ -38,6 +38,7 @@ Current baseline:
 - Vitest is split into unit/component and database integration suites for faster feedback
 - Integration tests run against a separate PostgreSQL database so destructive cleanup does not touch seeded development data
 - GitHub Actions CI validates lint, migrations, and tests on pushes and pull requests
+- The next major phase is legacy-site ingestion and gallery UI refinement
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
 ## Build From Scratch
@@ -311,6 +312,23 @@ This project will combine two connected areas:
 
 - A public-facing aquarium and personal portfolio website
 - A logged-in aquarium management app for tanks, water tests, maintenance logs, and journal entries
+
+## Roadmap
+
+Current near-term direction:
+
+- audit the original `aquascapetherapy` site for reusable content, imagery, typography, and layout patterns
+- define the first gallery MVP around seeded tanks and aquascapes
+- improve the public-facing UI so the structured aquascape data is actually visible and feels portfolio-ready
+- build shareable public aquascape detail pages using slugs
+- document and later enforce publishing rules for public aquascapes
+- add authentication so users can eventually manage and submit their own aquascapes
+
+Longer-term direction:
+
+- expand portfolio seed content with additional real aquascapes
+- evolve the app into a fuller aquarium management workflow
+- build an aquascaping AI assistant grounded in your design philosophy and content
 
 ## Development Approach
 

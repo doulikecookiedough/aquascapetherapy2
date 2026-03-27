@@ -7,9 +7,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "."),
     },
   },
-  test: {
-    environment: "jsdom",
-    fileParallelism: false,
-    setupFiles: ["./tests/setup.ts"],
-  },
 });

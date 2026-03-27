@@ -10,8 +10,12 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:test": "node scripts/prisma-migrate-test.mjs",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "npm run test:unit & npm run test:integration & wait",
+    "test:watch": "vitest --config vitest.unit.config.ts",
+    "test:unit": "vitest run --config vitest.unit.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:unit:watch": "vitest --config vitest.unit.config.ts",
+    "test:integration:watch": "vitest --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",

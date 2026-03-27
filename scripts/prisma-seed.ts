@@ -73,33 +73,164 @@ async function seedPortfolioTanks() {
     console.log(`Seeded tank: ${savedTank.name}`);
 
     for (const aquascape of tank.aquascapes) {
-      const existingAquascape = await prisma.aquascape.findFirst({
+      const savedAquascape = await prisma.aquascape.upsert({
         where: {
+          tankId_slug: {
+            tankId: savedTank.id,
+            slug: aquascape.slug,
+          },
+        },
+        update: {
+          name: aquascape.name,
+          description: aquascape.description,
+          isPublic: aquascape.isPublic,
+          status: aquascape.status,
+        },
+        create: {
           tankId: savedTank.id,
           name: aquascape.name,
+          slug: aquascape.slug,
+          description: aquascape.description,
+          isPublic: aquascape.isPublic,
+          status: aquascape.status,
         },
       });
 
-      if (existingAquascape === null) {
-        await prisma.aquascape.create({
+      await prisma.aquascapeImage.deleteMany({
+        where: {
+          aquascapeId: savedAquascape.id,
+        },
+      });
+      await prisma.aquascapeEquipment.deleteMany({
+        where: {
+          aquascapeId: savedAquascape.id,
+        },
+      });
+      await prisma.aquascapePlant.deleteMany({
+        where: {
+          aquascapeId: savedAquascape.id,
+        },
+      });
+      await prisma.aquascapeFauna.deleteMany({
+        where: {
+          aquascapeId: savedAquascape.id,
+        },
+      });
+      await prisma.aquascapeFact.deleteMany({
+        where: {
+          aquascapeId: savedAquascape.id,
+        },
+      });
+
+      for (const image of aquascape.images) {
+        await prisma.aquascapeImage.create({
           data: {
-            tankId: savedTank.id,
-            name: aquascape.name,
-            description: aquascape.description,
-            isPublic: aquascape.isPublic,
-          },
-        });
-      } else {
-        await prisma.aquascape.update({
-          where: {
-            id: existingAquascape.id,
-          },
-          data: {
-            description: aquascape.description,
-            isPublic: aquascape.isPublic,
+            aquascapeId: savedAquascape.id,
+            src: image.src,
+            alt: image.alt,
+            displayOrder: image.displayOrder,
+            isPrimary: image.isPrimary,
           },
         });
       }
+
+      for (const equipment of aquascape.equipment) {
+        await prisma.aquascapeEquipment.create({
+          data: {
+            aquascapeId: savedAquascape.id,
+            category: equipment.category,
+            name: equipment.name,
+            details: equipment.details,
+            displayOrder: equipment.displayOrder,
+          },
+        });
+      }
+
+      for (const plant of aquascape.plants) {
+        const savedPlant = await prisma.plant.upsert({
+          where: {
+            slug: plant.slug,
+          },
+          update: {
+            name: plant.name,
+            scientificName: plant.scientificName,
+            commonName: plant.commonName,
+            description: plant.description,
+          },
+          create: {
+            name: plant.name,
+            slug: plant.slug,
+            scientificName: plant.scientificName,
+            commonName: plant.commonName,
+            description: plant.description,
+          },
+        });
+
+        await prisma.aquascapePlant.create({
+          data: {
+            aquascapeId: savedAquascape.id,
+            plantId: savedPlant.id,
+            displayOrder: plant.displayOrder,
+            notes: plant.notes,
+          },
+        });
+      }
+
+      for (const fauna of aquascape.fauna) {
+        const savedFauna = await prisma.fauna.upsert({
+          where: {
+            slug: fauna.slug,
+          },
+          update: {
+            name: fauna.name,
+            description: fauna.description,
+          },
+          create: {
+            name: fauna.name,
+            slug: fauna.slug,
+            description: fauna.description,
+          },
+        });
+
+        await prisma.aquascapeFauna.create({
+          data: {
+            aquascapeId: savedAquascape.id,
+            faunaId: savedFauna.id,
+            displayOrder: fauna.displayOrder,
+            notes: fauna.notes,
+          },
+        });
+      }
+
+      for (const fact of aquascape.facts) {
+        const factType = await prisma.factType.upsert({
+          where: {
+            slug: fact.slug,
+          },
+          update: {
+            name: fact.name,
+            unit: fact.unit,
+            isSystem: fact.isSystem,
+          },
+          create: {
+            name: fact.name,
+            slug: fact.slug,
+            unit: fact.unit,
+            isSystem: fact.isSystem,
+          },
+        });
+
+        await prisma.aquascapeFact.create({
+          data: {
+            aquascapeId: savedAquascape.id,
+            factTypeId: factType.id,
+            value: fact.value,
+            displayOrder: fact.displayOrder,
+          },
+        });
+      }
+
+      console.log(`Seeded aquascape: ${savedAquascape.name}`);
     }
   }
 

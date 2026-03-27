@@ -37,6 +37,7 @@ Current baseline:
 - Permanent portfolio seed data is available for the local development database, including the first structured aquascape entry
 - Vitest is split into unit/component and database integration suites for faster feedback
 - Integration tests run against a separate PostgreSQL database so destructive cleanup does not touch seeded development data
+- GitHub Actions CI validates lint, migrations, and tests on pushes and pull requests
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
 ## Build From Scratch
@@ -153,13 +154,22 @@ You should see the portfolio seed tanks on `/tanks`.
 npm run lint
 ```
 
-### 12. Stop PostgreSQL
+### 12. Understand CI validation
+
+GitHub Actions runs the main validation workflow on:
+
+- `push`
+- `pull_request`
+
+The workflow provisions PostgreSQL, creates both project databases, applies Prisma migrations, and then runs lint plus the full test suite.
+
+### 13. Stop PostgreSQL
 
 ```bash
 docker compose down
 ```
 
-### 13. Remove PostgreSQL data volume
+### 14. Remove PostgreSQL data volume
 
 ```bash
 docker compose down -v
@@ -216,6 +226,15 @@ Integration test data is isolated by using:
 
 - development database: `aquascapetherapy`
 - test database: `aquascapetherapy_test`
+
+Continuous integration uses GitHub Actions to:
+
+- start PostgreSQL in the CI runner
+- create the development and test databases
+- generate the Prisma client
+- apply migrations to both databases
+- run ESLint
+- run the full test suite
 
 ## Prisma
 

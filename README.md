@@ -32,7 +32,7 @@ Current baseline:
 - Local PostgreSQL runs through Docker Compose
 - Prisma 7 configured with `User`, `Tank`, and `Aquascape` models
 - A shared Prisma client wrapper and ownership-aware tank query/mutation modules are in place
-- The `/tanks` page supports a real read/write flow for physical tanks and previews the latest aquascape
+- The `/tanks` page supports a real read/create/delete flow for physical tanks and previews the latest aquascape
 - Development uses a dedicated local database and integration tests use a separate local test database
 - Permanent portfolio seed data is available for the local development database
 - Vitest is split into unit/component and database integration suites for faster feedback
@@ -191,7 +191,7 @@ Current automated coverage includes:
 - tanks page component render test
 - tank validation test
 - tank query integration test
-- tank mutation integration test
+- tank mutation integration test for create and delete flows
 
 Testing tools in use:
 
@@ -226,6 +226,7 @@ Prisma is configured with:
 - shared Prisma client wrapper at `lib/db.ts`
 - query module at `server/queries/tanks.ts`
 - mutation module at `server/mutations/tanks.ts`
+- tank server actions at `app/(app)/tanks/actions.ts`
 - temporary portfolio owner bootstrap helper at `server/portfolio-owner.ts`
 - permanent portfolio seed data at `data/portfolio-seed.ts`
 - Prisma seed script at `scripts/prisma-seed.ts`
@@ -250,6 +251,14 @@ Current model direction:
 - a `Tank` is a physical aquarium with dimensions and visibility
 - a `Tank` can have many `Aquascape`s over time
 - an `Aquascape` represents the artistic layout and can also be public or private
+
+Current tank-management flow:
+
+- read tanks for the portfolio owner
+- create tanks from the `/tanks` form
+- delete tanks from the `/tanks` inventory
+- validate incoming form data before persistence
+- enforce ownership checks in the mutation layer before deleting
 
 The current local seed data includes:
 

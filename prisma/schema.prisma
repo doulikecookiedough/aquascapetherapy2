@@ -7,6 +7,24 @@ datasource db {
   provider = "postgresql"
 }
 
+enum AquascapeStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum EquipmentCategory {
+  TANK
+  LIGHTING
+  FILTER
+  CO2
+  HEATING
+  SUBSTRATE
+  FERTILIZER
+  OTHER
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -36,15 +54,141 @@ model Tank {
 }
 
 model Aquascape {
-  id          String   @id @default(cuid())
-  tankId       String
-  tank         Tank     @relation(fields: [tankId], references: [id], onDelete: Cascade)
-  name         String
-  description  String?
-  isPublic     Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String            @id @default(cuid())
+  tankId      String
+  name        String
+  slug        String
+  description String?
+  isPublic    Boolean           @default(false)
+  status      AquascapeStatus   @default(DRAFT)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  tank        Tank              @relation(fields: [tankId], references: [id], onDelete: Cascade)
+  images      AquascapeImage[]
+  equipment   AquascapeEquipment[]
+  plants      AquascapePlant[]
+  fauna       AquascapeFauna[]
+  facts       AquascapeFact[]
 
   @@index([tankId])
   @@index([isPublic])
+  @@index([status])
+  @@unique([tankId, slug])
+}
+
+model AquascapeImage {
+  id           String     @id @default(cuid())
+  aquascapeId  String
+  src          String
+  alt          String
+  displayOrder Int        @default(0)
+  isPrimary    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  aquascape    Aquascape  @relation(fields: [aquascapeId], references: [id], onDelete: Cascade)
+
+  @@index([aquascapeId])
+}
+
+model AquascapeEquipment {
+  id           String            @id @default(cuid())
+  aquascapeId  String
+  category     EquipmentCategory
+  name         String
+  details      String?
+  displayOrder Int               @default(0)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  aquascape    Aquascape         @relation(fields: [aquascapeId], references: [id], onDelete: Cascade)
+
+  @@index([aquascapeId])
+}
+
+model Plant {
+  id             String           @id @default(cuid())
+  name           String           @unique
+  slug           String           @unique
+  scientificName String?
+  commonName     String?
+  description    String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  aquascapes     AquascapePlant[]
+}
+
+model AquascapePlant {
+  id           String     @id @default(cuid())
+  aquascapeId  String
+  plantId      String
+  displayOrder Int        @default(0)
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  aquascape    Aquascape  @relation(fields: [aquascapeId], references: [id], onDelete: Cascade)
+  plant        Plant      @relation(fields: [plantId], references: [id], onDelete: Cascade)
+
+  @@index([aquascapeId])
+  @@index([plantId])
+  @@unique([aquascapeId, plantId])
+}
+
+model Fauna {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  slug        String           @unique
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  aquascapes  AquascapeFauna[]
+}
+
+model AquascapeFauna {
+  id           String     @id @default(cuid())
+  aquascapeId  String
+  faunaId      String
+  displayOrder Int        @default(0)
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  aquascape    Aquascape  @relation(fields: [aquascapeId], references: [id], onDelete: Cascade)
+  fauna        Fauna      @relation(fields: [faunaId], references: [id], onDelete: Cascade)
+
+  @@index([aquascapeId])
+  @@index([faunaId])
+  @@unique([aquascapeId, faunaId])
+}
+
+model FactType {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  slug        String           @unique
+  unit        String?
+  isSystem    Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  facts       AquascapeFact[]
+}
+
+model AquascapeFact {
+  id           String     @id @default(cuid())
+  aquascapeId  String
+  factTypeId   String
+  value        String
+  displayOrder Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  aquascape    Aquascape  @relation(fields: [aquascapeId], references: [id], onDelete: Cascade)
+  factType     FactType   @relation(fields: [factTypeId], references: [id], onDelete: Cascade)
+
+  @@index([aquascapeId])
+  @@index([factTypeId])
 }

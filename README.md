@@ -30,10 +30,11 @@ Current baseline:
 
 - Next.js app scaffolded
 - Local PostgreSQL runs through Docker Compose
-- Prisma 7 configured with an initial `Tank` model
-- First database migration applied
-- A shared Prisma client wrapper and first tank query module are in place
-- Vitest is set up for route, component, and database integration tests
+- Prisma 7 configured with `User`, `Tank`, and `Aquascape` models
+- Development and test Prisma migrations are applied
+- A shared Prisma client wrapper and ownership-aware tank query/mutation modules are in place
+- The `/tanks` page now supports a real read/write flow for physical tanks and previews the latest aquascape
+- Vitest is split into unit/component and database integration suites for faster feedback
 - Integration tests use a dedicated Prisma test schema so test data stays separate from development data
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
@@ -80,15 +81,23 @@ npm run prisma:migrate:test
 npm test
 ```
 
-The local PostgreSQL container must be running before the test suite will pass, because the suite now includes a Prisma-backed integration test for tank queries.
+The local PostgreSQL container must be running before the test suite will pass, because the suite includes Prisma-backed integration tests.
 
 The test suite uses the same PostgreSQL instance as local development, but points Prisma at a separate `test` schema so integration test data does not affect the main development schema.
 
-For watch mode during development:
+Helpful test commands during development:
 
 ```bash
 npm run test:watch
+npm run test:unit
+npm run test:integration
+npm run test:unit:watch
+npm run test:integration:watch
 ```
+
+- `npm test` runs the unit and integration suites concurrently
+- `npm run test:watch` watches the unit/component suite
+- `npm run test:integration` runs only the database-backed integration suite
 
 ### 7. Start the Next.js app
 
@@ -138,8 +147,12 @@ docker compose down -v
 - `npm run prisma:migrate` applies local Prisma migrations in development
 - `npm run prisma:migrate:test` applies the same Prisma migrations to the test schema
 - `npm run prisma:generate` regenerates the Prisma client
-- `npm test` runs the test suite once
-- `npm run test:watch` runs Vitest in watch mode
+- `npm test` runs the unit and integration suites together
+- `npm run test:watch` runs the unit/component suite in watch mode
+- `npm run test:unit` runs only the unit/component suite
+- `npm run test:integration` runs only the database integration suite
+- `npm run test:unit:watch` runs the unit/component suite in watch mode
+- `npm run test:integration:watch` runs the integration suite in watch mode
 
 ## Testing
 
@@ -148,7 +161,9 @@ Current automated coverage includes:
 - health route test
 - homepage component render test
 - tanks page component render test
+- tank validation test
 - tank query integration test
+- tank mutation integration test
 
 Testing tools in use:
 
@@ -164,6 +179,11 @@ The integration test suite expects:
 - local PostgreSQL to be running
 - Prisma migrations to have been applied to both the development schema and the test schema
 
+The test suite is split into:
+
+- unit/component tests running in `jsdom`
+- integration tests running in `node`
+
 Integration test data is isolated by using:
 
 - development schema: `public`
@@ -176,7 +196,9 @@ Prisma is configured with:
 - schema file at `prisma/schema.prisma`
 - Prisma 7 config at `prisma.config.ts`
 - shared Prisma client wrapper at `lib/db.ts`
-- first server query module at `server/queries/tanks.ts`
+- query module at `server/queries/tanks.ts`
+- mutation module at `server/mutations/tanks.ts`
+- temporary portfolio owner bootstrap helper at `server/portfolio-owner.ts`
 - generated client output at `prisma/generated/`
 - migration history at `prisma/migrations/`
 
@@ -186,18 +208,18 @@ Test database support includes:
 - a dedicated test-schema migration command
 - integration tests that run against the `test` schema instead of `public`
 
-The initial model is:
+The current data model includes:
 
+- `User`
 - `Tank`
+- `Aquascape`
 
-The first migration creates the `Tank` table with:
+Current model direction:
 
-- `id`
-- `name`
-- `volumeLiters`
-- `description`
-- `createdAt`
-- `updatedAt`
+- a `User` can own many `Tank`s
+- a `Tank` is a physical aquarium with dimensions and visibility
+- a `Tank` can have many `Aquascape`s over time
+- an `Aquascape` represents the artistic layout and can also be public or private
 
 ## Project Direction
 

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-background">
@@ -38,6 +40,19 @@ export default function Home() {
               the project also serves as a TypeScript learning record.
             </p>
           </div>
+        </div>
+
+        <div className="flex flex-col gap-4 pt-2 sm:flex-row">
+          <Link
+            className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90"
+            href="/tanks"
+          >
+            View Tanks
+          </Link>
+          <p className="max-w-xl text-sm leading-7 text-muted">
+            The tanks page is the first real full-stack slice in the app,
+            combining Prisma reads, validation, and the first write flow.
+          </p>
         </div>
       </section>
     </main>

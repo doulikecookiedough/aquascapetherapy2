@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createTankSchema } from "@/lib/validations/tank";
+import { createTankSchema, parseCreateTankFormData } from "@/lib/validations/tank";
 
 describe("createTankSchema", () => {
   it("accepts valid tank input", () => {
@@ -35,5 +35,20 @@ describe("createTankSchema", () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it("parses form data into typed tank input", () => {
+    const formData = new FormData();
+    formData.set("name", "Nature Style 90P");
+    formData.set("volumeLiters", "180");
+    formData.set("description", "A larger display aquarium.");
+
+    const result = parseCreateTankFormData(formData);
+
+    expect(result).toEqual({
+      name: "Nature Style 90P",
+      volumeLiters: 180,
+      description: "A larger display aquarium.",
+    });
   });
 });

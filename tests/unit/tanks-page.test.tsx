@@ -21,6 +21,17 @@ describe("Tanks page", () => {
     expect(
       screen.getByRole("heading", { name: "Tanks" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Add a Tank" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Tank Name" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("spinbutton", { name: "Volume (Liters)" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: "Description" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Create Tank" }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Tank Inventory" })).toBeInTheDocument();
     expect(screen.getByText("No tanks yet")).toBeInTheDocument();
     expect(

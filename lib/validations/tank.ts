@@ -18,4 +18,20 @@ export const createTankSchema = z.object({
     .transform((value) => (value && value.length > 0 ? value : undefined)),
 });
 
+const createTankFormSchema = z.object({
+  name: z.string(),
+  volumeLiters: z.coerce.number(),
+  description: z.string().optional(),
+});
+
 export type CreateTankInput = z.infer<typeof createTankSchema>;
+
+export function parseCreateTankFormData(formData: FormData): CreateTankInput {
+  const rawInput = createTankFormSchema.parse({
+    name: formData.get("name"),
+    volumeLiters: formData.get("volumeLiters"),
+    description: formData.get("description"),
+  });
+
+  return createTankSchema.parse(rawInput);
+}

@@ -19,7 +19,7 @@ describe("Tanks page", () => {
     render(await TanksPage());
 
     expect(
-      screen.getByRole("heading", { name: "Tanks" }),
+      screen.getByRole("heading", { name: "Aquariums" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Add Tank" }),

@@ -18,7 +18,7 @@ export default async function TanksPage() {
         <p className="text-sm font-medium uppercase tracking-[0.3em] text-accent">
           App
         </p>
-        <h1 className="text-4xl font-semibold tracking-tight">Tanks</h1>
+        <h1 className="text-4xl font-semibold tracking-tight">Aquariums</h1>
         <p className="max-w-2xl text-base leading-7 text-muted">
           The first database-backed page is now reading tank records from
           PostgreSQL through Prisma.

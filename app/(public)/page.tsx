@@ -6,15 +6,14 @@ export default function Home() {
       <section className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-10 px-6 py-20 md:px-10">
         <div className="max-w-3xl space-y-6">
           <p className="text-sm font-medium uppercase tracking-[0.3em] text-accent">
-            Aquarium Portfolio + Tracker
+            Personal Portfolio + Studio
           </p>
           <h1 className="font-display text-5xl leading-tight tracking-tight text-foreground md:text-7xl">
-            Aquascape Therapy
+            Aquarium Design Studio
           </h1>
           <p className="max-w-2xl text-lg leading-8 text-muted md:text-xl">
-            A personal aquarium project for documenting contest entries,
-            teaching aquarium keeping, and learning full-stack TypeScript by
-            building a real product from scratch.
+            A personal portfolio for documenting aquariums, aquascapes, and the
+            design decisions that shape them over time.
           </p>
         </div>
 
@@ -22,22 +21,22 @@ export default function Home() {
           <div className="rounded-3xl bg-surface p-6 shadow-sm ring-1 ring-black/5">
             <h2 className="text-lg font-semibold">Public Portfolio</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              Contest entries, galleries, and long-form writeups around
-              aquascaping.
+              A curated collection of aquariums, contest entries, and
+              portfolio-grade aquascape presentation.
             </p>
           </div>
           <div className="rounded-3xl bg-surface p-6 shadow-sm ring-1 ring-black/5">
-            <h2 className="text-lg font-semibold">Private Tracking App</h2>
+            <h2 className="text-lg font-semibold">Aquascape Documentation</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              Tanks, water tests, maintenance logs, and journal entries will
-              live behind authentication.
+              Structured notes, equipment, plants, fauna, facts, and photo
+              history for each aquascape.
             </p>
           </div>
           <div className="rounded-3xl bg-accent-soft p-6 shadow-sm ring-1 ring-black/5">
-            <h2 className="text-lg font-semibold">Learning Goal</h2>
+            <h2 className="text-lg font-semibold">Private Tracking</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              Each feature is being added incrementally with a clean history so
-              the project also serves as a TypeScript learning record.
+              Tank management, maintenance, and future private workflows will
+              live behind authentication.
             </p>
           </div>
         </div>
@@ -47,11 +46,11 @@ export default function Home() {
             className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
             href="/tanks"
           >
-            <span style={{ color: "#ffffff" }}>Tanks</span>
+            <span style={{ color: "#ffffff" }}>Aquariums</span>
           </Link>
           <p className="max-w-xl text-sm leading-7 text-muted">
-            The tanks page is the first real full-stack slice in the app,
-            combining Prisma reads, validation, and the first write flow.
+            View the current aquarium collection, preview the latest aquascape
+            for each tank, and continue documenting new work over time.
           </p>
         </div>
       </section>

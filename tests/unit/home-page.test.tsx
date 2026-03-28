@@ -8,10 +8,10 @@ describe("Home page", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("heading", { name: "Aquascape Therapy" }),
+      screen.getByRole("heading", { name: "Aquarium Design Studio" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Public Portfolio")).toBeInTheDocument();
-    expect(screen.getByText("Private Tracking App")).toBeInTheDocument();
-    expect(screen.getByText("Learning Goal")).toBeInTheDocument();
+    expect(screen.getByText("Aquascape Documentation")).toBeInTheDocument();
+    expect(screen.getByText("Private Tracking")).toBeInTheDocument();
   });
 });

@@ -32,13 +32,15 @@ Current baseline:
 - Local PostgreSQL runs through Docker Compose
 - Prisma 7 configured with a structured gallery model for users, tanks, aquascapes, images, equipment, plants, fauna, and facts
 - A shared Prisma client wrapper and ownership-aware tank query/mutation modules are in place
-- The `/tanks` page supports a real read/create/delete flow for physical tanks and previews the latest aquascape
+- The public homepage now uses real seeded collection data to feature an aquarium and latest aquascape preview
+- The `/tanks` page now reads as an aquarium collection view with a real read/create/delete flow for physical tanks and latest-aquascape previews
 - Development uses a dedicated local database and integration tests use a separate local test database
 - Permanent portfolio seed data is available for the local development database, including the first structured aquascape entry
 - Vitest is split into unit/component and database integration suites for faster feedback
 - Integration tests run against a separate PostgreSQL database so destructive cleanup does not touch seeded development data
 - GitHub Actions CI validates lint, migrations, and tests on pushes and pull requests
-- The next major phase is legacy-site ingestion and gallery UI refinement
+- The initial legacy-site audit has been translated into the first portfolio-facing typography, copy, and homepage framing updates
+- The next major phase is designing the gallery MVP and public aquascape detail pages
 - Development is being done incrementally with Codex, with each step reviewed and explained before moving forward
 
 ## Build From Scratch
@@ -147,7 +149,10 @@ The health route should return:
 {"ok":true,"service":"aquascape-therapy"}
 ```
 
-You should see the portfolio seed tanks on `/tanks`.
+You should see:
+
+- a portfolio-style homepage with a featured aquarium preview at `/`
+- the seeded aquarium collection on `/tanks`
 
 ### 11. Lint the codebase
 
@@ -198,8 +203,8 @@ docker compose down -v
 Current automated coverage includes:
 
 - health route test
-- homepage component render test
-- tanks page component render test
+- homepage component render test with featured aquarium preview
+- tanks page component render test with gallery preview, create-panel toggle, and empty-image state
 - tank validation test
 - tank query integration test, including latest-aquascape nested gallery relations
 - tank mutation integration test for create and delete flows
@@ -288,6 +293,7 @@ Current tank-management flow:
 - read tanks for the portfolio owner
 - create tanks from the `/tanks` form
 - delete tanks from the `/tanks` inventory
+- preview the latest aquascape with a primary image or explicit unavailable-image state
 - validate incoming form data before persistence
 - enforce ownership checks in the mutation layer before deleting
 
@@ -317,7 +323,6 @@ This project will combine two connected areas:
 
 Current near-term direction:
 
-- audit the original `aquascapetherapy` site for reusable content, imagery, typography, and layout patterns
 - define the first gallery MVP around seeded tanks and aquascapes
 - improve the public-facing UI so the structured aquascape data is actually visible and feels portfolio-ready
 - build shareable public aquascape detail pages using slugs

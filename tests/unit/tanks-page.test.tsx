@@ -69,11 +69,109 @@ describe("Tanks page", () => {
             status: "APPROVED",
             createdAt: new Date("2026-03-26T12:00:00.000Z"),
             updatedAt: new Date("2026-03-26T12:00:00.000Z"),
-            images: [],
-            equipment: [],
-            plants: [],
-            fauna: [],
-            facts: [],
+            images: [
+              {
+                id: "image-1",
+                aquascapeId: "scape-1",
+                src: "https://example.com/pacific-northwest.jpg",
+                alt: "Pacific Northwest aquascape in an ADA 120P aquarium.",
+                displayOrder: 0,
+                isPrimary: true,
+                createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+              },
+            ],
+            equipment: [
+              {
+                id: "equipment-1",
+                aquascapeId: "scape-1",
+                category: "LIGHTING",
+                name: "ADA Solar RGB",
+                details: "x2",
+                displayOrder: 0,
+                createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+              },
+            ],
+            plants: [
+              {
+                id: "plant-link-1",
+                aquascapeId: "scape-1",
+                plantId: "plant-1",
+                displayOrder: 0,
+                notes: null,
+                createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                plant: {
+                  id: "plant-1",
+                  name: "Java Fern",
+                  slug: "java-fern",
+                  scientificName: null,
+                  commonName: null,
+                  description: null,
+                  createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                  updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                },
+              },
+              {
+                id: "plant-link-2",
+                aquascapeId: "scape-1",
+                plantId: "plant-2",
+                displayOrder: 1,
+                notes: null,
+                createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                plant: {
+                  id: "plant-2",
+                  name: "Anubias Pinto",
+                  slug: "anubias-pinto",
+                  scientificName: null,
+                  commonName: null,
+                  description: null,
+                  createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                  updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                },
+              },
+            ],
+            fauna: [
+              {
+                id: "fauna-link-1",
+                aquascapeId: "scape-1",
+                faunaId: "fauna-1",
+                displayOrder: 0,
+                notes: null,
+                createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                fauna: {
+                  id: "fauna-1",
+                  name: "Cherry Shrimp",
+                  slug: "cherry-shrimp",
+                  description: null,
+                  createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                  updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                },
+              },
+            ],
+            facts: [
+              {
+                id: "fact-1",
+                aquascapeId: "scape-1",
+                factTypeId: "fact-type-1",
+                value: "7 Hours",
+                displayOrder: 0,
+                createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                factType: {
+                  id: "fact-type-1",
+                  name: "Light Period",
+                  slug: "light-period",
+                  unit: null,
+                  isSystem: true,
+                  createdAt: new Date("2026-03-26T12:00:00.000Z"),
+                  updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+                },
+              },
+            ],
           },
         ],
       },
@@ -86,8 +184,16 @@ describe("Tanks page", () => {
     expect(screen.getByText("182 liters / 48.1 gallons")).toBeInTheDocument();
     expect(screen.getByText("Pacific Northwest")).toBeInTheDocument();
     expect(
+      screen.getByRole("img", {
+        name: "Pacific Northwest aquascape in an ADA 120P aquarium.",
+      }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByText(/forests of the pacific northwest/i),
     ).toBeInTheDocument();
+    expect(screen.getByText(/2 plants/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 fauna/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 fact/i)).toBeInTheDocument();
     expect(screen.getByText("1 tank")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Delete Tank" }),

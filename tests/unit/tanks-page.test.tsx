@@ -21,6 +21,7 @@ describe("Tanks page", () => {
     expect(
       screen.getByRole("heading", { name: "Aquariums" }),
     ).toBeInTheDocument();
+    expect(screen.getByText("Aquarium Design Studio")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Add Tank" }),
     ).toBeInTheDocument();
@@ -30,10 +31,19 @@ describe("Tanks page", () => {
     expect(
       screen.queryByRole("button", { name: "Delete Tank" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Tank Inventory" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Aquarium Collection" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("No tanks yet")).toBeInTheDocument();
     expect(
-      screen.getByText(/first database-backed page is now reading tank records/i),
+      screen.getByText(
+        /a living index of the aquariums and aquascapes currently being documented/i,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /start by adding an aquarium to begin documenting its aquascapes over time/i,
+      ),
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Add Tank" }));

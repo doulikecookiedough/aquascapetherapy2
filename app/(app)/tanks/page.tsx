@@ -16,12 +16,12 @@ export default async function TanksPage() {
     <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 py-16 md:px-10">
       <div className="space-y-4">
         <p className="text-sm font-medium uppercase tracking-[0.3em] text-accent">
-          App
+          Aquarium Design Studio
         </p>
         <h1 className="text-4xl font-semibold tracking-tight">Aquariums</h1>
         <p className="max-w-2xl text-base leading-7 text-muted">
-          The first database-backed page is now reading tank records from
-          PostgreSQL through Prisma.
+          A living index of the aquariums and aquascapes currently being
+          documented.
         </p>
       </div>
 
@@ -30,7 +30,7 @@ export default async function TanksPage() {
 
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Tank Inventory
+            Aquarium Collection
           </h2>
           <p className="text-sm text-muted">
             {tanks.length} {tanks.length === 1 ? "tank" : "tanks"}
@@ -41,8 +41,8 @@ export default async function TanksPage() {
           <div className="rounded-3xl bg-surface p-8 shadow-sm ring-1 ring-black/5">
             <h3 className="text-lg font-semibold">No tanks yet</h3>
             <p className="mt-3 max-w-xl text-sm leading-7 text-muted">
-              Once tank records are created, they will appear here as the first
-              real Prisma-backed feature in the app.
+              Start by adding an aquarium to begin documenting its aquascapes
+              over time.
             </p>
           </div>
         ) : (

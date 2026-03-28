@@ -18,7 +18,7 @@ export default async function TanksPage() {
         <p className="text-xs font-medium uppercase tracking-[0.4em] text-accent">
           Aquarium Design Studio
         </p>
-        <h1 className="max-w-4xl text-5xl font-semibold tracking-tight text-foreground md:text-6xl">
+        <h1 className="font-display max-w-4xl text-5xl leading-tight tracking-tight text-foreground md:text-6xl">
           Aquariums
         </h1>
         <p className="max-w-3xl text-lg leading-8 text-muted">
@@ -31,7 +31,7 @@ export default async function TanksPage() {
         <CreateTankPanel action={createTankAction} />
 
         <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-semibold tracking-tight">
+          <h2 className="font-display text-3xl tracking-tight">
             Aquarium Collection
           </h2>
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted">

@@ -8,7 +8,7 @@ export default function Home() {
           <p className="text-sm font-medium uppercase tracking-[0.3em] text-accent">
             Aquarium Portfolio + Tracker
           </p>
-          <h1 className="text-5xl font-semibold tracking-tight text-foreground md:text-7xl">
+          <h1 className="font-display text-5xl leading-tight tracking-tight text-foreground md:text-7xl">
             Aquascape Therapy
           </h1>
           <p className="max-w-2xl text-lg leading-8 text-muted md:text-xl">

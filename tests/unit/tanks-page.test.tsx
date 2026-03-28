@@ -199,4 +199,47 @@ describe("Tanks page", () => {
       screen.getByRole("button", { name: "Delete Tank" }),
     ).toBeInTheDocument();
   });
+
+  it("renders an unavailable image state when the latest aquascape has no images", async () => {
+    vi.mocked(listTanks).mockResolvedValue([
+      {
+        id: "tank-2",
+        name: "Studio Display",
+        lengthCm: 120,
+        widthCm: 45,
+        heightCm: 45,
+        isPublic: true,
+        userId: "user-1",
+        createdAt: new Date("2026-03-25T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-25T12:00:00.000Z"),
+        aquascapes: [
+          {
+            id: "scape-2",
+            tankId: "tank-2",
+            name: "School Garden",
+            slug: "school-garden",
+            description: "A school-inspired planted aquascape.",
+            isPublic: true,
+            status: "APPROVED",
+            createdAt: new Date("2026-03-26T12:00:00.000Z"),
+            updatedAt: new Date("2026-03-26T12:00:00.000Z"),
+            images: [],
+            equipment: [],
+            plants: [],
+            fauna: [],
+            facts: [],
+          },
+        ],
+      },
+    ]);
+
+    render(await TanksPage());
+
+    expect(screen.getByText("Image not available yet")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("img", {
+        name: /school garden/i,
+      }),
+    ).not.toBeInTheDocument();
+  });
 });

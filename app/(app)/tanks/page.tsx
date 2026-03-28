@@ -166,7 +166,7 @@ export default async function TanksPage() {
                         {primaryImage ? (
                           <div className="flex min-h-64 w-full items-center justify-center rounded-2xl bg-background/70 p-4">
                             <img
-                              className="max-h-80 w-full rounded-xl object-contain"
+                              className="max-h-80 w-full object-contain"
                               src={primaryImage.src}
                               alt={primaryImage.alt}
                             />

@@ -164,11 +164,13 @@ export default async function TanksPage() {
                     {latestAquascape ? (
                       <div className="mt-3 space-y-4">
                         {primaryImage ? (
-                          <img
-                            className="h-64 w-full rounded-2xl object-cover"
-                            src={primaryImage.src}
-                            alt={primaryImage.alt}
-                          />
+                          <div className="flex min-h-64 w-full items-center justify-center rounded-2xl bg-background/70 p-4">
+                            <img
+                              className="max-h-80 w-full rounded-xl object-contain"
+                              src={primaryImage.src}
+                              alt={primaryImage.alt}
+                            />
+                          </div>
                         ) : (
                           <div className="flex h-64 w-full items-center justify-center rounded-2xl border border-dashed border-black/10 bg-background/70 px-6 text-center">
                             <p className="text-sm font-medium text-muted">

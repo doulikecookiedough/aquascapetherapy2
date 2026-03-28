@@ -25,9 +25,6 @@ describe("Tanks page", () => {
       screen.getByRole("button", { name: "Add Tank" }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { name: "Add a Tank" }),
-    ).not.toBeInTheDocument();
-    expect(
       screen.queryByRole("textbox", { name: "Tank Name" }),
     ).not.toBeInTheDocument();
     expect(
@@ -41,7 +38,6 @@ describe("Tanks page", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Add Tank" }));
 
-    expect(screen.getByRole("heading", { name: "Add a Tank" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Tank Name" })).toBeInTheDocument();
     expect(
       screen.getByRole("spinbutton", { name: "Length (cm)" }),

@@ -34,17 +34,6 @@ export function CreateTankPanel({ action }: CreateTankPanelProps) {
 
       {isOpen ? (
         <div className="mt-6 border-t border-black/5 pt-6">
-          <div className="space-y-2">
-            <h3 className="text-2xl font-semibold tracking-tight">
-              Add a Tank
-            </h3>
-            <p className="max-w-2xl text-sm leading-7 text-muted">
-              This simple form is the first full write flow in the app: browser
-              form data is submitted to a server action, validated, and then
-              persisted through Prisma.
-            </p>
-          </div>
-
           <form action={action} className="mt-6 grid gap-4">
             <label className="grid gap-2">
               <span className="text-sm font-medium">Tank Name</span>

@@ -28,7 +28,7 @@ export function CreateTankPanel({ action }: CreateTankPanelProps) {
           type="button"
           onClick={() => setIsOpen((currentValue) => !currentValue)}
         >
-          Add Tank
+          {isOpen ? "Close" : "Add Tank"}
         </button>
       </div>
 

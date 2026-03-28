@@ -2,6 +2,7 @@ import {
   createTankAction,
   deleteTankAction,
 } from "@/app/(app)/tanks/actions";
+import { CreateTankPanel } from "@/app/(app)/tanks/create-tank-panel";
 import {
   calculateTankVolumeGallons,
   calculateTankVolumeLiters,
@@ -25,79 +26,7 @@ export default async function TanksPage() {
       </div>
 
       <section className="mt-12 space-y-6">
-        <div className="rounded-3xl bg-surface p-8 shadow-sm ring-1 ring-black/5">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-semibold tracking-tight">
-              Add a Tank
-            </h2>
-            <p className="max-w-2xl text-sm leading-7 text-muted">
-              This simple form is the first full write flow in the app: browser
-              form data is submitted to a server action, validated, and then
-              persisted through Prisma.
-            </p>
-          </div>
-
-          <form action={createTankAction} className="mt-6 grid gap-4">
-            <label className="grid gap-2">
-              <span className="text-sm font-medium">Tank Name</span>
-              <input
-                className="rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
-                type="text"
-                name="name"
-                placeholder="Nature Style 90P"
-                required
-              />
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-medium">Length (cm)</span>
-              <input
-                className="rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
-                type="number"
-                name="lengthCm"
-                min="1"
-                step="1"
-                placeholder="90"
-                required
-              />
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-medium">Width (cm)</span>
-              <input
-                className="rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
-                type="number"
-                name="widthCm"
-                min="1"
-                step="1"
-                placeholder="45"
-                required
-              />
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-medium">Height (cm)</span>
-              <input
-                className="rounded-2xl border border-black/10 bg-background px-4 py-3 outline-none ring-0"
-                type="number"
-                name="heightCm"
-                min="1"
-                step="1"
-                placeholder="45"
-                required
-              />
-            </label>
-
-            <div>
-              <button
-                className="rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background"
-                type="submit"
-              >
-                Create Tank
-              </button>
-            </div>
-          </form>
-        </div>
+        <CreateTankPanel action={createTankAction} />
 
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold tracking-tight">

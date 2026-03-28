@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import TanksPage from "../../app/(app)/tanks/page";
@@ -21,6 +21,26 @@ describe("Tanks page", () => {
     expect(
       screen.getByRole("heading", { name: "Tanks" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Tank" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Add a Tank" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("textbox", { name: "Tank Name" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Delete Tank" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Tank Inventory" })).toBeInTheDocument();
+    expect(screen.getByText("No tanks yet")).toBeInTheDocument();
+    expect(
+      screen.getByText(/first database-backed page is now reading tank records/i),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Tank" }));
+
     expect(screen.getByRole("heading", { name: "Add a Tank" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Tank Name" })).toBeInTheDocument();
     expect(
@@ -34,14 +54,6 @@ describe("Tanks page", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Create Tank" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "Delete Tank" }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Tank Inventory" })).toBeInTheDocument();
-    expect(screen.getByText("No tanks yet")).toBeInTheDocument();
-    expect(
-      screen.getByText(/first database-backed page is now reading tank records/i),
     ).toBeInTheDocument();
   });
 

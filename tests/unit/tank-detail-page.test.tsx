@@ -1,6 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const { notFound } = vi.hoisted(() => ({
+  notFound: vi.fn(() => {
+    throw new Error("NEXT_NOT_FOUND");
+  }),
+}));
+
+vi.mock("next/navigation", () => ({
+  notFound,
+}));
+
 import TankDetailPage from "../../app/(app)/tanks/[tankId]/page";
 import { getTankById } from "../../server/queries/tanks";
 
@@ -11,6 +21,7 @@ vi.mock("../../server/queries/tanks", () => ({
 describe("Tank detail page", () => {
   beforeEach(() => {
     vi.mocked(getTankById).mockReset();
+    notFound.mockClear();
   });
 
   it("renders the latest aquascape hero and the older aquascape history", async () => {
@@ -162,5 +173,15 @@ describe("Tank detail page", () => {
     expect(
       screen.getByRole("link", { name: /view aquascape/i }),
     ).toHaveAttribute("href", "/aquascapes/school-garden");
+  });
+
+  it("calls notFound when the tank id does not resolve to an owned tank", async () => {
+    vi.mocked(getTankById).mockResolvedValue(null);
+
+    await expect(
+      TankDetailPage({ params: Promise.resolve({ tankId: "missing-tank" }) }),
+    ).rejects.toThrow("NEXT_NOT_FOUND");
+
+    expect(notFound).toHaveBeenCalledTimes(1);
   });
 });

@@ -4,7 +4,7 @@ import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { prisma } from "@/lib/db";
 import { getOrCreatePortfolioOwner } from "@/server/portfolio-owner";
-import { listTanks } from "@/server/queries/tanks";
+import { getTankById, listTanks } from "@/server/queries/tanks";
 
 describe("listTanks", () => {
   beforeEach(async () => {
@@ -215,5 +215,98 @@ describe("listTanks", () => {
     expect(tanks[0]?.aquascapes[0]?.facts[0]?.factType.slug).toBe(
       "temperature",
     );
+  });
+
+  it("returns a single tank with all aquascapes ordered newest first", async () => {
+    const owner = await getOrCreatePortfolioOwner();
+    const otherUser = await prisma.user.create({
+      data: {
+        email: "guest@portfolio.local",
+        firstName: "Guest",
+        lastName: "Aquarist",
+      },
+    });
+
+    const tank = await prisma.tank.create({
+      data: {
+        name: "ADA 150P",
+        lengthCm: 150,
+        widthCm: 60,
+        heightCm: 60,
+        userId: owner.id,
+      },
+    });
+
+    const olderAquascape = await prisma.aquascape.create({
+      data: {
+        tankId: tank.id,
+        name: "Nana's Pass",
+        slug: "nanas-pass",
+        description: "An older 150P layout.",
+        isPublic: true,
+        status: "APPROVED",
+      },
+    });
+
+    const newerAquascape = await prisma.aquascape.create({
+      data: {
+        tankId: tank.id,
+        name: "Scalare Summit",
+        slug: "scalare-summit",
+        description: "A newer 150P layout.",
+        isPublic: true,
+        status: "APPROVED",
+        images: {
+          create: [
+            {
+              src: "https://example.com/scalare-summit.jpg",
+              alt: "Scalare Summit aquascape.",
+              displayOrder: 0,
+              isPrimary: true,
+            },
+          ],
+        },
+      },
+    });
+
+    const guestTank = await prisma.tank.create({
+      data: {
+        name: "Guest Tank",
+        lengthCm: 60,
+        widthCm: 30,
+        heightCm: 36,
+        userId: otherUser.id,
+      },
+    });
+
+    const plant = await prisma.plant.create({
+      data: {
+        name: "Anubias Nana",
+        slug: "anubias-nana",
+      },
+    });
+
+    await prisma.aquascapePlant.create({
+      data: {
+        aquascapeId: newerAquascape.id,
+        plantId: plant.id,
+        displayOrder: 0,
+      },
+    });
+
+    const tankDetail = await getTankById(tank.id);
+    const missingTank = await getTankById(guestTank.id);
+
+    expect(tankDetail?.id).toBe(tank.id);
+    expect(tankDetail?.aquascapes).toHaveLength(2);
+    expect(tankDetail?.aquascapes[0]?.id).toBe(newerAquascape.id);
+    expect(tankDetail?.aquascapes[1]?.id).toBe(olderAquascape.id);
+    expect(tankDetail?.aquascapes[0]?.images[0]?.src).toBe(
+      "https://example.com/scalare-summit.jpg",
+    );
+    expect(tankDetail?.aquascapes[0]?.plants[0]?.plant.slug).toBe(
+      "anubias-nana",
+    );
+    expect(missingTank).toBeNull();
   });
 });

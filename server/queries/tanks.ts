@@ -1,47 +1,6 @@
 import { prisma } from "@/lib/db";
 import { getOrCreatePortfolioOwner } from "@/server/portfolio-owner";
-
-const aquascapeInclude = {
-  images: {
-    orderBy: [
-      {
-        isPrimary: "desc" as const,
-      },
-      {
-        displayOrder: "asc" as const,
-      },
-    ],
-  },
-  equipment: {
-    orderBy: {
-      displayOrder: "asc" as const,
-    },
-  },
-  plants: {
-    include: {
-      plant: true,
-    },
-    orderBy: {
-      displayOrder: "asc" as const,
-    },
-  },
-  fauna: {
-    include: {
-      fauna: true,
-    },
-    orderBy: {
-      displayOrder: "asc" as const,
-    },
-  },
-  facts: {
-    include: {
-      factType: true,
-    },
-    orderBy: {
-      displayOrder: "asc" as const,
-    },
-  },
-};
+import { aquascapeInclude } from "@/server/queries/aquascape-include";
 
 export async function listTanks() {
   const owner = await getOrCreatePortfolioOwner();

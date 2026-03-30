@@ -153,8 +153,14 @@ describe("Tank detail page", () => {
     expect(screen.getByText(/1 fauna/i)).toBeInTheDocument();
     expect(screen.getByText(/1 fact/i)).toBeInTheDocument();
     expect(
+      screen.getByRole("link", { name: /view current aquascape/i }),
+    ).toHaveAttribute("href", "/aquascapes/giant-pebbles");
+    expect(
       screen.getByRole("heading", { name: "Aquascape History" }),
     ).toBeInTheDocument();
     expect(screen.getByText("School Garden")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /view aquascape/i }),
+    ).toHaveAttribute("href", "/aquascapes/school-garden");
   });
 });

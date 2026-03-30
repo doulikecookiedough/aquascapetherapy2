@@ -101,6 +101,14 @@ export default async function TankDetailPage({ params }: TankDetailPageProps) {
                   {currentAquascape.facts.length === 1 ? "fact" : "facts"}
                 </span>
               </div>
+              <div className="pt-1">
+                <Link
+                  className="inline-flex items-center justify-center rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
+                  href={`/aquascapes/${currentAquascape.slug}`}
+                >
+                  View Current Aquascape
+                </Link>
+              </div>
             </div>
 
             <div>

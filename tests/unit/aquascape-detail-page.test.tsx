@@ -1,6 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const { notFound } = vi.hoisted(() => ({
+  notFound: vi.fn(() => {
+    throw new Error("NEXT_NOT_FOUND");
+  }),
+}));
+
+vi.mock("next/navigation", () => ({
+  notFound,
+}));
+
 import AquascapeDetailPage from "../../app/(public)/aquascapes/[slug]/page";
 import { getAquascapeBySlug } from "../../server/queries/aquascapes";
 
@@ -11,6 +21,7 @@ vi.mock("../../server/queries/aquascapes", () => ({
 describe("Aquascape detail page", () => {
   beforeEach(() => {
     vi.mocked(getAquascapeBySlug).mockReset();
+    notFound.mockClear();
   });
 
   it("renders the aquascape journal with images, equipment, facts, plants, and fauna", async () => {
@@ -162,5 +173,60 @@ describe("Aquascape detail page", () => {
     expect(screen.getByText("Java Fern")).toBeInTheDocument();
     expect(screen.getByText("Fauna")).toBeInTheDocument();
     expect(screen.getByText("Cherry Shrimp")).toBeInTheDocument();
+  });
+
+  it("renders an unavailable image state when the aquascape has no images", async () => {
+    vi.mocked(getAquascapeBySlug).mockResolvedValue({
+      id: "scape-2",
+      tankId: "tank-1",
+      name: "School Garden",
+      slug: "school-garden",
+      description: "A school-inspired planted aquascape.",
+      isPublic: true,
+      status: "APPROVED",
+      createdAt: new Date("2026-03-28T12:00:00.000Z"),
+      updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      tank: {
+        id: "tank-1",
+        name: "ADA 120P",
+        lengthCm: 120,
+        widthCm: 45,
+        heightCm: 45,
+        isPublic: true,
+        userId: "user-1",
+        createdAt: new Date("2026-03-25T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-25T12:00:00.000Z"),
+      },
+      images: [],
+      equipment: [],
+      plants: [],
+      fauna: [],
+      facts: [],
+    });
+
+    render(
+      await AquascapeDetailPage({
+        params: Promise.resolve({ slug: "school-garden" }),
+      }),
+    );
+
+    expect(screen.getByText("Image not available yet")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("img", {
+        name: /school garden/i,
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("calls notFound when the aquascape slug is invalid", async () => {
+    vi.mocked(getAquascapeBySlug).mockResolvedValue(null);
+
+    await expect(
+      AquascapeDetailPage({
+        params: Promise.resolve({ slug: "missing-slug" }),
+      }),
+    ).rejects.toThrow("NEXT_NOT_FOUND");
+
+    expect(notFound).toHaveBeenCalledTimes(1);
   });
 });

@@ -84,9 +84,9 @@ export default async function Home() {
                   ) : null}
                   <Link
                     className="inline-flex items-center justify-center rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
-                    href="/tanks"
+                    href={`/tanks/${featuredTank.id}`}
                   >
-                    View Collection
+                    View Aquarium
                   </Link>
                 </div>
 

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   createTankAction,
   deleteTankAction,
@@ -154,15 +156,23 @@ export default async function TanksPage() {
                     )}
                   </div>
 
-                  <form action={deleteTankAction} className="mt-5">
-                    <input type="hidden" name="tankId" value={tank.id} />
-                    <button
-                      className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
-                      type="submit"
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <Link
+                      className="inline-flex items-center justify-center rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
+                      href={`/tanks/${tank.id}`}
                     >
-                      Delete Tank
-                    </button>
-                  </form>
+                      View Aquarium
+                    </Link>
+                    <form action={deleteTankAction}>
+                      <input type="hidden" name="tankId" value={tank.id} />
+                      <button
+                        className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
+                        type="submit"
+                      >
+                        Delete Tank
+                      </button>
+                    </form>
+                  </div>
                 </article>
               );
             })}

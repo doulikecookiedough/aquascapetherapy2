@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -60,10 +61,13 @@ export default async function AquascapeDetailPage({
         {primaryImage ? (
           <div className="space-y-5">
             <div className="flex min-h-80 w-full items-center justify-center rounded-[1.5rem] bg-background/70 p-4">
-              <img
+              <Image
                 className="max-h-[32rem] w-full object-contain"
                 src={primaryImage.src}
                 alt={primaryImage.alt}
+                width={1800}
+                height={1350}
+                sizes="(min-width: 1024px) 72rem, 100vw"
               />
             </div>
 
@@ -78,10 +82,13 @@ export default async function AquascapeDetailPage({
                       key={image.id}
                       className="flex min-h-56 items-center justify-center rounded-[1.25rem] bg-background/70 p-4"
                     >
-                      <img
+                      <Image
                         className="max-h-72 w-full object-contain"
                         src={image.src}
                         alt={image.alt}
+                        width={1200}
+                        height={900}
+                        sizes="(min-width: 768px) 50vw, 100vw"
                       />
                     </div>
                   ))}

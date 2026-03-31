@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -114,10 +115,13 @@ export default async function TankDetailPage({ params }: TankDetailPageProps) {
             <div>
               {currentImage ? (
                 <div className="flex min-h-72 w-full items-center justify-center rounded-[1.5rem] bg-background/70 p-4">
-                  <img
+                  <Image
                     className="max-h-96 w-full object-contain"
                     src={currentImage.src}
                     alt={currentImage.alt}
+                    width={1600}
+                    height={1200}
+                    sizes="(min-width: 1024px) 40rem, 100vw"
                   />
                 </div>
               ) : (
@@ -178,10 +182,13 @@ export default async function TankDetailPage({ params }: TankDetailPageProps) {
                   <div className="grid gap-5 md:grid-cols-[9rem_minmax(0,1fr)] md:items-start">
                     <div className="flex h-36 w-full items-center justify-center rounded-[1.25rem] bg-background/70 p-3">
                       {historyImage ? (
-                        <img
+                        <Image
                           className="max-h-32 w-full object-contain"
                           src={historyImage.src}
                           alt={historyImage.alt}
+                          width={576}
+                          height={384}
+                          sizes="9rem"
                         />
                       ) : (
                         <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-muted">

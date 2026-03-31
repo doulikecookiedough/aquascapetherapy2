@@ -41,14 +41,14 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 pt-2">
+        <div className="flex flex-col items-center gap-4 pt-2">
           <Link
             className="inline-flex items-center justify-center rounded-full bg-foreground px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
             href="/tanks"
           >
             <span style={{ color: "#ffffff" }}>See Preview</span>
           </Link>
-          <p className="max-w-xl text-sm leading-7 text-muted">
+          <p className="max-w-xl text-center text-sm leading-7 text-muted">
             View the current portfolio preview while the authoring and gallery
             workflows continue to evolve.
           </p>

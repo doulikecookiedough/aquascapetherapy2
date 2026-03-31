@@ -30,13 +30,15 @@ Current baseline:
 - A shared Prisma client wrapper and ownership-aware tank query/mutation modules are in place
 - The public homepage now uses real seeded collection data to feature an aquarium and latest aquascape preview
 - The `/tanks` page now reads as an aquarium collection view with a real read/create/delete flow for physical tanks and latest-aquascape previews
+- Tank detail pages now show aquarium dimensions, the current aquascape, and aquascape history for each seeded aquarium
+- Aquascape journal pages now show full aquascape detail by slug, including images, equipment, plants, fauna, and facts
 - Development uses a dedicated local database and integration tests use a separate local test database
-- Permanent portfolio seed data is available for the local development database, including the first structured aquascape entry
+- Permanent portfolio seed data is available for the local development database, including real portfolio aquascapes for `ADA 120P` and `ADA 150P`
 - Vitest is split into unit/component and database integration suites for faster feedback
 - Integration tests run against a separate PostgreSQL database so destructive cleanup does not touch seeded development data
 - GitHub Actions CI validates lint, migrations, and tests on pushes and pull requests
 - The initial legacy-site audit has been translated into the first portfolio-facing typography, copy, and homepage framing updates
-- The next major phase is designing the gallery MVP and public aquascape detail pages
+- The next major phase is improving authoring workflows, starting with aquascape creation from the tank detail flow
 - Development is being done incrementally with small, reviewable changes across schema, tests, seed data, and UI
 
 ## Build From Scratch
@@ -149,6 +151,8 @@ You should see:
 
 - a portfolio-style homepage with a featured aquarium preview at `/`
 - the seeded aquarium collection on `/tanks`
+- aquarium history pages at `/tanks/[tankId]`
+- aquascape journal pages at `/aquascapes/[slug]`
 
 ### 11. Lint the codebase
 
@@ -201,8 +205,11 @@ Current automated coverage includes:
 - health route test
 - homepage component render test with featured aquarium preview
 - tanks page component render test with gallery preview, create-panel toggle, and empty-image state
+- tank detail page component render test with aquascape history, current-aquascape navigation, and invalid tank handling
+- aquascape detail page component render test with journal content, no-image fallback, and invalid slug handling
 - tank validation test
 - tank query integration test, including latest-aquascape nested gallery relations
+- aquascape detail query integration test with owner scoping and nested journal data
 - tank mutation integration test for create and delete flows
 
 Testing tools in use:
@@ -245,6 +252,8 @@ Prisma is configured with:
 - schema file at `prisma/schema.prisma`
 - Prisma 7 config at `prisma.config.ts`
 - shared Prisma client wrapper at `lib/db.ts`
+- shared aquascape include config at `server/queries/aquascape-include.ts`
+- aquascape query module at `server/queries/aquascapes.ts`
 - query module at `server/queries/tanks.ts`
 - mutation module at `server/mutations/tanks.ts`
 - tank server actions at `app/(app)/tanks/actions.ts`
@@ -290,6 +299,8 @@ Current tank-management flow:
 - create tanks from the `/tanks` form
 - delete tanks from the `/tanks` inventory
 - preview the latest aquascape with a primary image or explicit unavailable-image state
+- view a tank detail page with the current aquascape and older aquascape history
+- view a dedicated aquascape journal page by slug
 - validate incoming form data before persistence
 - enforce ownership checks in the mutation layer before deleting
 
@@ -298,13 +309,12 @@ The current local seed data includes:
 - a portfolio owner user
 - `ADA 150P`
 - `ADA 120P`
-- the `Pacific Northwest` aquascape on `ADA 120P`
-- structured aquascape seed content for:
-  - images
-  - equipment
-  - plants
-  - fauna
-  - facts
+- `Pacific Northwest`
+- `School Garden`
+- `Giant Pebbles`
+- `Nana's Pass`
+- `Scalare Summit`
+- structured aquascape seed content for images, equipment, plants, fauna, and facts where legacy source data exists
 
 These seeds are intended as local development and portfolio bootstrap content, not as automated test fixtures.
 
@@ -322,7 +332,7 @@ Current near-term direction:
 
 - define the first gallery MVP around seeded tanks and aquascapes
 - improve the public-facing UI so the structured aquascape data is actually visible and feels portfolio-ready
-- build shareable public aquascape detail pages using slugs
+- add aquascape authoring flows from the tank detail page
 - document and later enforce publishing rules for public aquascapes
 - add authentication so users can eventually manage and submit their own aquascapes
 

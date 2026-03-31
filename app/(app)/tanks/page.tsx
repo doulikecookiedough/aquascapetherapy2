@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -103,10 +104,13 @@ export default async function TanksPage() {
                       <div className="mt-4 space-y-5">
                         {primaryImage ? (
                           <div className="flex min-h-64 w-full items-center justify-center rounded-2xl bg-background/70 p-4">
-                            <img
+                            <Image
                               className="max-h-80 w-full object-contain"
                               src={primaryImage.src}
                               alt={primaryImage.alt}
+                              width={1600}
+                              height={1200}
+                              sizes="(min-width: 1024px) 56rem, 100vw"
                             />
                           </div>
                         ) : (

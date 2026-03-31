@@ -50,7 +50,7 @@ export default async function Home() {
           </Link>
           <p className="max-w-xl text-center text-sm leading-7 text-muted">
             View the current portfolio preview while the authoring and gallery
-            workflows continue to evolve.
+            flows take shape.
           </p>
         </div>
       </section>

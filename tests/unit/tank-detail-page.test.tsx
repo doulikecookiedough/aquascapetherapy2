@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { notFound } = vi.hoisted(() => ({
@@ -154,6 +154,9 @@ describe("Tank detail page", () => {
     expect(
       screen.getByRole("heading", { name: "Current Aquascape" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Aquascape" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Giant Pebbles")).toBeInTheDocument();
     expect(
       screen.getByRole("img", {
@@ -173,6 +176,22 @@ describe("Tank detail page", () => {
     expect(
       screen.getByRole("link", { name: /view aquascape/i }),
     ).toHaveAttribute("href", "/aquascapes/school-garden");
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Aquascape" }));
+
+    expect(
+      screen.getByRole("textbox", { name: "Aquascape Name" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Slug" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: "Description" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "Status" })).toHaveValue(
+      "DRAFT",
+    );
+    expect(
+      screen.getByRole("button", { name: "Create Aquascape" }),
+    ).toBeInTheDocument();
   });
 
   it("calls notFound when the tank id does not resolve to an owned tank", async () => {

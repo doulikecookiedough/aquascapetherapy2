@@ -61,6 +61,7 @@ describe("aquascape fact mutations", () => {
         name: "Light Period",
         slug: "light-period",
         isSystem: true,
+        isRepeatable: false,
       },
     });
 
@@ -110,6 +111,7 @@ describe("aquascape fact mutations", () => {
         slug: "temperature",
         unit: "C",
         isSystem: true,
+        isRepeatable: false,
       },
     });
 
@@ -143,6 +145,7 @@ describe("aquascape fact mutations", () => {
         name: "Water Change",
         slug: "water-change",
         isSystem: true,
+        isRepeatable: false,
       },
     });
 
@@ -159,5 +162,46 @@ describe("aquascape fact mutations", () => {
         value: "30% weekly",
       }),
     ).rejects.toThrow("This fact has already been added to the aquascape.");
+  });
+
+  it("allows repeatable fact types to be added more than once", async () => {
+    const tank = await createTank({
+      name: "Repeatable Tank",
+      lengthCm: 120,
+      widthCm: 45,
+      heightCm: 45,
+    });
+
+    const aquascape = await createAquascape({
+      tankId: tank.id,
+      name: "Repeatable Layout",
+      slug: "repeatable-layout",
+      description: null,
+      status: "DRAFT",
+    });
+
+    const factType = await prisma.factType.create({
+      data: {
+        name: "Hardscape",
+        slug: "hardscape",
+        isSystem: false,
+        isRepeatable: true,
+      },
+    });
+
+    const first = await createAquascapeFact({
+      aquascapeId: aquascape.id,
+      factTypeId: factType.id,
+      value: "Manzanita Wood",
+    });
+
+    const second = await createAquascapeFact({
+      aquascapeId: aquascape.id,
+      factTypeId: factType.id,
+      value: "ADA Yamaya Stone",
+    });
+
+    expect(first.fact.displayOrder).toBe(0);
+    expect(second.fact.displayOrder).toBe(1);
   });
 });

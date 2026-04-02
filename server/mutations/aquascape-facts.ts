@@ -40,6 +40,7 @@ export async function createAquascapeFact(input: CreateAquascapeFactInput) {
     },
     select: {
       id: true,
+      isRepeatable: true,
     },
   });
 
@@ -47,18 +48,20 @@ export async function createAquascapeFact(input: CreateAquascapeFactInput) {
     throw new Error("Fact type not found.");
   }
 
-  const existingFact = await prisma.aquascapeFact.findFirst({
-    where: {
-      aquascapeId: data.aquascapeId,
-      factTypeId: data.factTypeId,
-    },
-    select: {
-      id: true,
-    },
-  });
+  if (!factType.isRepeatable) {
+    const existingFact = await prisma.aquascapeFact.findFirst({
+      where: {
+        aquascapeId: data.aquascapeId,
+        factTypeId: data.factTypeId,
+      },
+      select: {
+        id: true,
+      },
+    });
 
-  if (existingFact) {
-    throw new Error("This fact has already been added to the aquascape.");
+    if (existingFact) {
+      throw new Error("This fact has already been added to the aquascape.");
+    }
   }
 
   const fact = await prisma.aquascapeFact.create({

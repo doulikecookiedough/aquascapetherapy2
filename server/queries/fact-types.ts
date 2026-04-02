@@ -4,6 +4,9 @@ export async function listFactTypes() {
   return prisma.factType.findMany({
     orderBy: [
       {
+        isRepeatable: "desc",
+      },
+      {
         isSystem: "desc",
       },
       {

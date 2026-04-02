@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { createAquascapeImageAction } from "@/app/(public)/aquascapes/[slug]/actions";
+import { AddImagePanel } from "@/app/(public)/aquascapes/[slug]/add-image-panel";
 import { getAquascapeBySlug } from "@/server/queries/aquascapes";
 
 type AquascapeDetailPageProps = {
@@ -54,7 +56,14 @@ export default async function AquascapeDetailPage({
         </div>
       </div>
 
-      <section className="mt-12 space-y-6 rounded-[2rem] bg-surface p-7 shadow-sm ring-1 ring-black/5 md:p-8">
+      <div className="mt-12">
+        <AddImagePanel
+          aquascapeId={aquascape.id}
+          action={createAquascapeImageAction}
+        />
+      </div>
+
+      <section className="mt-8 space-y-6 rounded-[2rem] bg-surface p-7 shadow-sm ring-1 ring-black/5 md:p-8">
         <h2 className="text-xs font-medium uppercase tracking-[0.3em] text-accent">
           Current View
         </h2>

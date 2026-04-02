@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { notFound } = vi.hoisted(() => ({
@@ -154,6 +154,9 @@ describe("Aquascape detail page", () => {
     expect(
       screen.getByRole("heading", { name: "Pacific Northwest" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Image" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("ADA 120P")).toBeInTheDocument();
     expect(
       screen.getByRole("img", {
@@ -173,6 +176,17 @@ describe("Aquascape detail page", () => {
     expect(screen.getByText("Java Fern")).toBeInTheDocument();
     expect(screen.getByText("Fauna")).toBeInTheDocument();
     expect(screen.getByText("Cherry Shrimp")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Image" }));
+
+    expect(screen.getByRole("textbox", { name: "Image URL" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Alt Text" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("checkbox", { name: "Mark as primary image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Image" }),
+    ).toBeInTheDocument();
   });
 
   it("renders an unavailable image state when the aquascape has no images", async () => {

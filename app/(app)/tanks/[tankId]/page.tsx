@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { createAquascapeAction } from "@/app/(app)/tanks/actions";
+import { CreateAquascapePanel } from "@/app/(app)/tanks/[tankId]/create-aquascape-panel";
 import {
   calculateTankVolumeGallons,
   calculateTankVolumeLiters,
@@ -144,6 +146,11 @@ export default async function TankDetailPage({ params }: TankDetailPageProps) {
       )}
 
       <section className="mt-12 space-y-6">
+        <CreateAquascapePanel
+          tankId={tank.id}
+          action={createAquascapeAction}
+        />
+
         <div className="flex items-center justify-between">
           <h2 className="font-display text-3xl tracking-tight">
             Aquascape History

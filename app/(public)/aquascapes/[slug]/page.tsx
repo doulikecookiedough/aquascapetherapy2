@@ -35,6 +35,7 @@ export default async function AquascapeDetailPage({
   const additionalImages = primaryImage
     ? aquascape.images.filter((image) => image.id !== primaryImage.id)
     : aquascape.images;
+  const repeatableFactCounts = new Map<string, number>();
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-16 md:px-10 lg:px-12">
@@ -156,14 +157,24 @@ export default async function AquascapeDetailPage({
           <h2 className="font-display text-3xl tracking-tight">Facts</h2>
           {aquascape.facts.length > 0 ? (
             <ul className="mt-5 space-y-3 text-sm leading-7 text-muted">
-              {aquascape.facts.map((fact) => (
-                <li key={fact.id}>
-                  <span className="font-medium text-foreground">
-                    {fact.factType.name}
-                  </span>
-                  : {fact.value}
-                </li>
-              ))}
+              {aquascape.facts.map((fact) => {
+                const nextCount =
+                  (repeatableFactCounts.get(fact.factType.id) ?? 0) + 1;
+                repeatableFactCounts.set(fact.factType.id, nextCount);
+
+                const factLabel = fact.factType.isRepeatable
+                  ? `${fact.factType.name} ${nextCount}`
+                  : fact.factType.name;
+
+                return (
+                  <li key={fact.id}>
+                    <span className="font-medium text-foreground">
+                      {factLabel}
+                    </span>
+                    : {fact.value}
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <p className="mt-5 text-sm leading-7 text-muted">

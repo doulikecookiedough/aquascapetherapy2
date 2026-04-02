@@ -6,6 +6,7 @@ type FactTypeOption = {
   id: string;
   name: string;
   unit: string | null;
+  isRepeatable: boolean;
 };
 
 type AddFactPanelProps = {

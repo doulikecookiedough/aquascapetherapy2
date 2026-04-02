@@ -141,6 +141,7 @@ describe("Aquascape detail page", () => {
             slug: "light-period",
             unit: null,
             isSystem: true,
+            isRepeatable: false,
             createdAt: new Date("2026-03-28T12:00:00.000Z"),
             updatedAt: new Date("2026-03-28T12:00:00.000Z"),
           },
@@ -154,6 +155,7 @@ describe("Aquascape detail page", () => {
         slug: "light-period",
         unit: null,
         isSystem: true,
+        isRepeatable: false,
         createdAt: new Date("2026-03-28T12:00:00.000Z"),
         updatedAt: new Date("2026-03-28T12:00:00.000Z"),
       },
@@ -163,6 +165,7 @@ describe("Aquascape detail page", () => {
         slug: "temperature",
         unit: "C",
         isSystem: true,
+        isRepeatable: false,
         createdAt: new Date("2026-03-28T12:00:00.000Z"),
         updatedAt: new Date("2026-03-28T12:00:00.000Z"),
       },
@@ -220,6 +223,95 @@ describe("Aquascape detail page", () => {
     expect(screen.getByRole("textbox", { name: "Value" })).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Save Fact" }),
+    ).toBeInTheDocument();
+  });
+
+  it("numbers repeatable facts by occurrence in the journal view", async () => {
+    vi.mocked(getAquascapeBySlug).mockResolvedValue({
+      id: "scape-repeatable",
+      tankId: "tank-1",
+      name: "Repeatable Layout",
+      slug: "repeatable-layout",
+      description: null,
+      isPublic: true,
+      status: "APPROVED",
+      createdAt: new Date("2026-03-28T12:00:00.000Z"),
+      updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      tank: {
+        id: "tank-1",
+        name: "ADA 120P",
+        lengthCm: 120,
+        widthCm: 45,
+        heightCm: 45,
+        isPublic: true,
+        userId: "user-1",
+        createdAt: new Date("2026-03-25T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-25T12:00:00.000Z"),
+      },
+      images: [],
+      equipment: [],
+      plants: [],
+      fauna: [],
+      facts: [
+        {
+          id: "fact-1",
+          aquascapeId: "scape-repeatable",
+          factTypeId: "fact-type-hardscape",
+          value: "Manzanita Wood",
+          displayOrder: 0,
+          createdAt: new Date("2026-03-28T12:00:00.000Z"),
+          updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          factType: {
+            id: "fact-type-hardscape",
+            name: "Hardscape",
+            slug: "hardscape",
+            unit: null,
+            isSystem: false,
+            isRepeatable: true,
+            createdAt: new Date("2026-03-28T12:00:00.000Z"),
+            updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          },
+        },
+        {
+          id: "fact-2",
+          aquascapeId: "scape-repeatable",
+          factTypeId: "fact-type-hardscape",
+          value: "ADA Yamaya Stone",
+          displayOrder: 1,
+          createdAt: new Date("2026-03-28T12:00:00.000Z"),
+          updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          factType: {
+            id: "fact-type-hardscape",
+            name: "Hardscape",
+            slug: "hardscape",
+            unit: null,
+            isSystem: false,
+            isRepeatable: true,
+            createdAt: new Date("2026-03-28T12:00:00.000Z"),
+            updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          },
+        },
+      ],
+    });
+    vi.mocked(listFactTypes).mockResolvedValue([]);
+
+    render(
+      await AquascapeDetailPage({
+        params: Promise.resolve({ slug: "repeatable-layout" }),
+      }),
+    );
+
+    expect(screen.getByText("Hardscape 1")).toBeInTheDocument();
+    expect(screen.getByText("Hardscape 2")).toBeInTheDocument();
+    expect(
+      screen.getByText((_, element) =>
+        element?.textContent === "Hardscape 1: Manzanita Wood",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText((_, element) =>
+        element?.textContent === "Hardscape 2: ADA Yamaya Stone",
+      ),
     ).toBeInTheDocument();
   });
 

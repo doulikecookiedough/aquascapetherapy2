@@ -13,14 +13,20 @@ vi.mock("next/navigation", () => ({
 
 import AquascapeDetailPage from "../../app/(public)/aquascapes/[slug]/page";
 import { getAquascapeBySlug } from "../../server/queries/aquascapes";
+import { listFactTypes } from "../../server/queries/fact-types";
 
 vi.mock("../../server/queries/aquascapes", () => ({
   getAquascapeBySlug: vi.fn(),
 }));
 
+vi.mock("../../server/queries/fact-types", () => ({
+  listFactTypes: vi.fn(),
+}));
+
 describe("Aquascape detail page", () => {
   beforeEach(() => {
     vi.mocked(getAquascapeBySlug).mockReset();
+    vi.mocked(listFactTypes).mockReset();
     notFound.mockClear();
   });
 
@@ -141,6 +147,26 @@ describe("Aquascape detail page", () => {
         },
       ],
     });
+    vi.mocked(listFactTypes).mockResolvedValue([
+      {
+        id: "fact-type-1",
+        name: "Light Period",
+        slug: "light-period",
+        unit: null,
+        isSystem: true,
+        createdAt: new Date("2026-03-28T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      },
+      {
+        id: "fact-type-2",
+        name: "Temperature",
+        slug: "temperature",
+        unit: "C",
+        isSystem: true,
+        createdAt: new Date("2026-03-28T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      },
+    ]);
 
     render(
       await AquascapeDetailPage({
@@ -187,6 +213,14 @@ describe("Aquascape detail page", () => {
     expect(
       screen.getByRole("button", { name: "Save Image" }),
     ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Fact" }));
+
+    expect(screen.getByRole("combobox", { name: "Fact Type" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Value" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Fact" }),
+    ).toBeInTheDocument();
   });
 
   it("renders an unavailable image state when the aquascape has no images", async () => {
@@ -217,6 +251,7 @@ describe("Aquascape detail page", () => {
       fauna: [],
       facts: [],
     });
+    vi.mocked(listFactTypes).mockResolvedValue([]);
 
     render(
       await AquascapeDetailPage({
@@ -234,6 +269,7 @@ describe("Aquascape detail page", () => {
 
   it("calls notFound when the aquascape slug is invalid", async () => {
     vi.mocked(getAquascapeBySlug).mockResolvedValue(null);
+    vi.mocked(listFactTypes).mockResolvedValue([]);
 
     await expect(
       AquascapeDetailPage({

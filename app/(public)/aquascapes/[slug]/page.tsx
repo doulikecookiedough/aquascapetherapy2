@@ -2,9 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { createAquascapeImageAction } from "@/app/(public)/aquascapes/[slug]/actions";
+import { AddFactPanel } from "@/app/(public)/aquascapes/[slug]/add-fact-panel";
+import {
+  createAquascapeFactAction,
+  createAquascapeImageAction,
+} from "@/app/(public)/aquascapes/[slug]/actions";
 import { AddImagePanel } from "@/app/(public)/aquascapes/[slug]/add-image-panel";
 import { getAquascapeBySlug } from "@/server/queries/aquascapes";
+import { listFactTypes } from "@/server/queries/fact-types";
 
 type AquascapeDetailPageProps = {
   params: Promise<{
@@ -16,7 +21,10 @@ export default async function AquascapeDetailPage({
   params,
 }: AquascapeDetailPageProps) {
   const { slug } = await params;
-  const aquascape = await getAquascapeBySlug(slug);
+  const [aquascape, factTypes] = await Promise.all([
+    getAquascapeBySlug(slug),
+    listFactTypes(),
+  ]);
 
   if (!aquascape) {
     notFound();
@@ -60,6 +68,14 @@ export default async function AquascapeDetailPage({
         <AddImagePanel
           aquascapeId={aquascape.id}
           action={createAquascapeImageAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddFactPanel
+          aquascapeId={aquascape.id}
+          factTypes={factTypes}
+          action={createAquascapeFactAction}
         />
       </div>
 

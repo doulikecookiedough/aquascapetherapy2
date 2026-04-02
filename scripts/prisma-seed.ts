@@ -211,12 +211,14 @@ async function seedPortfolioTanks() {
             name: fact.name,
             unit: fact.unit,
             isSystem: fact.isSystem,
+            isRepeatable: fact.isRepeatable ?? false,
           },
           create: {
             name: fact.name,
             slug: fact.slug,
             unit: fact.unit,
             isSystem: fact.isSystem,
+            isRepeatable: fact.isRepeatable ?? false,
           },
         });
 

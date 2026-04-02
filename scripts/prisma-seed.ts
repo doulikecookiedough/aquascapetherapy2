@@ -236,6 +236,15 @@ async function seedPortfolioTanks() {
     }
   }
 
+  // Remove legacy fact types that are no longer referenced after reseeding.
+  await prisma.factType.deleteMany({
+    where: {
+      facts: {
+        none: {},
+      },
+    },
+  });
+
   const totalTanks = await prisma.tank.count({
     where: {
       userId: owner.id,

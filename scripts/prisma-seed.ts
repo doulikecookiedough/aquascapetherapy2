@@ -211,12 +211,14 @@ async function seedPortfolioTanks() {
             name: fact.name,
             unit: fact.unit,
             isSystem: fact.isSystem,
+            isRepeatable: fact.isRepeatable ?? false,
           },
           create: {
             name: fact.name,
             slug: fact.slug,
             unit: fact.unit,
             isSystem: fact.isSystem,
+            isRepeatable: fact.isRepeatable ?? false,
           },
         });
 
@@ -233,6 +235,15 @@ async function seedPortfolioTanks() {
       console.log(`Seeded aquascape: ${savedAquascape.name}`);
     }
   }
+
+  // Remove legacy fact types that are no longer referenced after reseeding.
+  await prisma.factType.deleteMany({
+    where: {
+      facts: {
+        none: {},
+      },
+    },
+  });
 
   const totalTanks = await prisma.tank.count({
     where: {

@@ -161,7 +161,7 @@ describe("listTanks", () => {
       data: {
         name: "Temperature",
         slug: "temperature",
-        unit: "C",
+        unit: "°C",
         isSystem: true,
       },
     });

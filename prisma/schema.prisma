@@ -171,6 +171,7 @@ model FactType {
   slug        String           @unique
   unit        String?
   isSystem    Boolean          @default(false)
+  isRepeatable Boolean         @default(false)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 

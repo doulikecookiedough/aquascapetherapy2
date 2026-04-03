@@ -2,7 +2,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AddEquipmentPanel } from "@/app/(public)/aquascapes/[slug]/add-equipment-panel";
+import { AddFaunaPanel } from "@/app/(public)/aquascapes/[slug]/add-fauna-panel";
+import { AddFactPanel } from "@/app/(public)/aquascapes/[slug]/add-fact-panel";
+import {
+  createAquascapeEquipmentAction,
+  createAquascapeFaunaAction,
+  createAquascapeFactAction,
+  createAquascapeImageAction,
+  createAquascapePlantAction,
+} from "@/app/(public)/aquascapes/[slug]/actions";
+import { AddImagePanel } from "@/app/(public)/aquascapes/[slug]/add-image-panel";
+import { AddPlantPanel } from "@/app/(public)/aquascapes/[slug]/add-plant-panel";
 import { getAquascapeBySlug } from "@/server/queries/aquascapes";
+import { listFauna } from "@/server/queries/fauna";
+import { listFactTypes } from "@/server/queries/fact-types";
+import { listPlants } from "@/server/queries/plants";
 
 type AquascapeDetailPageProps = {
   params: Promise<{
@@ -14,7 +29,12 @@ export default async function AquascapeDetailPage({
   params,
 }: AquascapeDetailPageProps) {
   const { slug } = await params;
-  const aquascape = await getAquascapeBySlug(slug);
+  const [aquascape, factTypes, plants, fauna] = await Promise.all([
+    getAquascapeBySlug(slug),
+    listFactTypes(),
+    listPlants(),
+    listFauna(),
+  ]);
 
   if (!aquascape) {
     notFound();
@@ -25,6 +45,7 @@ export default async function AquascapeDetailPage({
   const additionalImages = primaryImage
     ? aquascape.images.filter((image) => image.id !== primaryImage.id)
     : aquascape.images;
+  const repeatableFactCounts = new Map<string, number>();
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-16 md:px-10 lg:px-12">
@@ -54,7 +75,45 @@ export default async function AquascapeDetailPage({
         </div>
       </div>
 
-      <section className="mt-12 space-y-6 rounded-[2rem] bg-surface p-7 shadow-sm ring-1 ring-black/5 md:p-8">
+      <div className="mt-12">
+        <AddImagePanel
+          aquascapeId={aquascape.id}
+          action={createAquascapeImageAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddEquipmentPanel
+          aquascapeId={aquascape.id}
+          action={createAquascapeEquipmentAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddFactPanel
+          aquascapeId={aquascape.id}
+          factTypes={factTypes}
+          action={createAquascapeFactAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddPlantPanel
+          aquascapeId={aquascape.id}
+          plants={plants}
+          action={createAquascapePlantAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddFaunaPanel
+          aquascapeId={aquascape.id}
+          fauna={fauna}
+          action={createAquascapeFaunaAction}
+        />
+      </div>
+
+      <section className="mt-8 space-y-6 rounded-[2rem] bg-surface p-7 shadow-sm ring-1 ring-black/5 md:p-8">
         <h2 className="text-xs font-medium uppercase tracking-[0.3em] text-accent">
           Current View
         </h2>
@@ -131,14 +190,24 @@ export default async function AquascapeDetailPage({
           <h2 className="font-display text-3xl tracking-tight">Facts</h2>
           {aquascape.facts.length > 0 ? (
             <ul className="mt-5 space-y-3 text-sm leading-7 text-muted">
-              {aquascape.facts.map((fact) => (
-                <li key={fact.id}>
-                  <span className="font-medium text-foreground">
-                    {fact.factType.name}
-                  </span>
-                  : {fact.value}
-                </li>
-              ))}
+              {aquascape.facts.map((fact) => {
+                const nextCount =
+                  (repeatableFactCounts.get(fact.factType.id) ?? 0) + 1;
+                repeatableFactCounts.set(fact.factType.id, nextCount);
+
+                const factLabel = fact.factType.isRepeatable
+                  ? `${fact.factType.name} ${nextCount}`
+                  : fact.factType.name;
+
+                return (
+                  <li key={fact.id}>
+                    <span className="font-medium text-foreground">
+                      {factLabel}
+                    </span>
+                    : {fact.value}
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <p className="mt-5 text-sm leading-7 text-muted">

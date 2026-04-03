@@ -1,0 +1,2 @@
+ALTER TABLE "FactType"
+ADD COLUMN "isRepeatable" BOOLEAN NOT NULL DEFAULT false;

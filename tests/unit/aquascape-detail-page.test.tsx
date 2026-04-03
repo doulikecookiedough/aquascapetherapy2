@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { notFound } = vi.hoisted(() => ({
@@ -13,14 +13,32 @@ vi.mock("next/navigation", () => ({
 
 import AquascapeDetailPage from "../../app/(public)/aquascapes/[slug]/page";
 import { getAquascapeBySlug } from "../../server/queries/aquascapes";
+import { listFauna } from "../../server/queries/fauna";
+import { listFactTypes } from "../../server/queries/fact-types";
+import { listPlants } from "../../server/queries/plants";
 
 vi.mock("../../server/queries/aquascapes", () => ({
   getAquascapeBySlug: vi.fn(),
 }));
 
+vi.mock("../../server/queries/fact-types", () => ({
+  listFactTypes: vi.fn(),
+}));
+
+vi.mock("../../server/queries/fauna", () => ({
+  listFauna: vi.fn(),
+}));
+
+vi.mock("../../server/queries/plants", () => ({
+  listPlants: vi.fn(),
+}));
+
 describe("Aquascape detail page", () => {
   beforeEach(() => {
     vi.mocked(getAquascapeBySlug).mockReset();
+    vi.mocked(listFauna).mockReset();
+    vi.mocked(listFactTypes).mockReset();
+    vi.mocked(listPlants).mockReset();
     notFound.mockClear();
   });
 
@@ -135,12 +153,57 @@ describe("Aquascape detail page", () => {
             slug: "light-period",
             unit: null,
             isSystem: true,
+            isRepeatable: false,
             createdAt: new Date("2026-03-28T12:00:00.000Z"),
             updatedAt: new Date("2026-03-28T12:00:00.000Z"),
           },
         },
       ],
     });
+    vi.mocked(listFactTypes).mockResolvedValue([
+      {
+        id: "fact-type-1",
+        name: "Light Period",
+        slug: "light-period",
+        unit: null,
+        isSystem: true,
+        isRepeatable: false,
+        createdAt: new Date("2026-03-28T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      },
+      {
+        id: "fact-type-2",
+        name: "Temperature",
+        slug: "temperature",
+        unit: "°C",
+        isSystem: true,
+        isRepeatable: false,
+        createdAt: new Date("2026-03-28T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      },
+    ]);
+    vi.mocked(listPlants).mockResolvedValue([
+      {
+        id: "plant-1",
+        name: "Java Fern",
+        slug: "java-fern",
+        scientificName: "Microsorum pteropus",
+        commonName: "Java Fern",
+        description: null,
+        createdAt: new Date("2026-03-28T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      },
+    ]);
+    vi.mocked(listFauna).mockResolvedValue([
+      {
+        id: "fauna-1",
+        name: "Cherry Shrimp",
+        slug: "cherry-shrimp",
+        description: null,
+        createdAt: new Date("2026-03-28T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      },
+    ]);
 
     render(
       await AquascapeDetailPage({
@@ -153,6 +216,18 @@ describe("Aquascape detail page", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Pacific Northwest" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Equipment" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Plant" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Fauna" }),
     ).toBeInTheDocument();
     expect(screen.getByText("ADA 120P")).toBeInTheDocument();
     expect(
@@ -173,6 +248,143 @@ describe("Aquascape detail page", () => {
     expect(screen.getByText("Java Fern")).toBeInTheDocument();
     expect(screen.getByText("Fauna")).toBeInTheDocument();
     expect(screen.getByText("Cherry Shrimp")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Image" }));
+
+    expect(screen.getByRole("textbox", { name: "Image URL" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Alt Text" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("checkbox", { name: "Mark as primary image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Image" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Equipment" }));
+
+    expect(screen.getByRole("combobox", { name: "Category" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Details" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Equipment" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Fact" }));
+
+    expect(screen.getByRole("combobox", { name: "Fact Type" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Value" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Fact" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Plant" }));
+
+    expect(screen.getByRole("combobox", { name: "Plant" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Notes" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Plant" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Fauna" }));
+
+    expect(screen.getByRole("combobox", { name: "Fauna" })).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Group of 12"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Fauna" }),
+    ).toBeInTheDocument();
+  });
+
+  it("numbers repeatable facts by occurrence in the journal view", async () => {
+    vi.mocked(getAquascapeBySlug).mockResolvedValue({
+      id: "scape-repeatable",
+      tankId: "tank-1",
+      name: "Repeatable Layout",
+      slug: "repeatable-layout",
+      description: null,
+      isPublic: true,
+      status: "APPROVED",
+      createdAt: new Date("2026-03-28T12:00:00.000Z"),
+      updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      tank: {
+        id: "tank-1",
+        name: "ADA 120P",
+        lengthCm: 120,
+        widthCm: 45,
+        heightCm: 45,
+        isPublic: true,
+        userId: "user-1",
+        createdAt: new Date("2026-03-25T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-25T12:00:00.000Z"),
+      },
+      images: [],
+      equipment: [],
+      plants: [],
+      fauna: [],
+      facts: [
+        {
+          id: "fact-1",
+          aquascapeId: "scape-repeatable",
+          factTypeId: "fact-type-hardscape",
+          value: "Manzanita Wood",
+          displayOrder: 0,
+          createdAt: new Date("2026-03-28T12:00:00.000Z"),
+          updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          factType: {
+            id: "fact-type-hardscape",
+            name: "Hardscape",
+            slug: "hardscape",
+            unit: null,
+            isSystem: false,
+            isRepeatable: true,
+            createdAt: new Date("2026-03-28T12:00:00.000Z"),
+            updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          },
+        },
+        {
+          id: "fact-2",
+          aquascapeId: "scape-repeatable",
+          factTypeId: "fact-type-hardscape",
+          value: "ADA Yamaya Stone",
+          displayOrder: 1,
+          createdAt: new Date("2026-03-28T12:00:00.000Z"),
+          updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          factType: {
+            id: "fact-type-hardscape",
+            name: "Hardscape",
+            slug: "hardscape",
+            unit: null,
+            isSystem: false,
+            isRepeatable: true,
+            createdAt: new Date("2026-03-28T12:00:00.000Z"),
+            updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+          },
+        },
+      ],
+    });
+    vi.mocked(listFactTypes).mockResolvedValue([]);
+    vi.mocked(listFauna).mockResolvedValue([]);
+    vi.mocked(listPlants).mockResolvedValue([]);
+
+    render(
+      await AquascapeDetailPage({
+        params: Promise.resolve({ slug: "repeatable-layout" }),
+      }),
+    );
+
+    expect(screen.getByText("Hardscape 1")).toBeInTheDocument();
+    expect(screen.getByText("Hardscape 2")).toBeInTheDocument();
+    expect(
+      screen.getByText((_, element) =>
+        element?.textContent === "Hardscape 1: Manzanita Wood",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText((_, element) =>
+        element?.textContent === "Hardscape 2: ADA Yamaya Stone",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("renders an unavailable image state when the aquascape has no images", async () => {
@@ -203,6 +415,9 @@ describe("Aquascape detail page", () => {
       fauna: [],
       facts: [],
     });
+    vi.mocked(listFactTypes).mockResolvedValue([]);
+    vi.mocked(listFauna).mockResolvedValue([]);
+    vi.mocked(listPlants).mockResolvedValue([]);
 
     render(
       await AquascapeDetailPage({
@@ -220,6 +435,9 @@ describe("Aquascape detail page", () => {
 
   it("calls notFound when the aquascape slug is invalid", async () => {
     vi.mocked(getAquascapeBySlug).mockResolvedValue(null);
+    vi.mocked(listFauna).mockResolvedValue([]);
+    vi.mocked(listFactTypes).mockResolvedValue([]);
+    vi.mocked(listPlants).mockResolvedValue([]);
 
     await expect(
       AquascapeDetailPage({

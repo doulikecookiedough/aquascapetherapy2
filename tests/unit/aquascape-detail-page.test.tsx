@@ -186,6 +186,9 @@ describe("Aquascape detail page", () => {
     expect(
       screen.getByRole("button", { name: "Add Image" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Equipment" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("ADA 120P")).toBeInTheDocument();
     expect(
       screen.getByRole("img", {
@@ -215,6 +218,15 @@ describe("Aquascape detail page", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Save Image" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Equipment" }));
+
+    expect(screen.getByRole("combobox", { name: "Category" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Details" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Equipment" }),
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Add Fact" }));

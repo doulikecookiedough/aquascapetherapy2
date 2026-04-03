@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AddEquipmentPanel } from "@/app/(public)/aquascapes/[slug]/add-equipment-panel";
 import { AddFactPanel } from "@/app/(public)/aquascapes/[slug]/add-fact-panel";
 import {
+  createAquascapeEquipmentAction,
   createAquascapeFactAction,
   createAquascapeImageAction,
 } from "@/app/(public)/aquascapes/[slug]/actions";
@@ -69,6 +71,13 @@ export default async function AquascapeDetailPage({
         <AddImagePanel
           aquascapeId={aquascape.id}
           action={createAquascapeImageAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddEquipmentPanel
+          aquascapeId={aquascape.id}
+          action={createAquascapeEquipmentAction}
         />
       </div>
 

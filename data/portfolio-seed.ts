@@ -229,7 +229,7 @@ export const portfolioSeedTanks: PortfolioTankSeed[] = [
           {
             name: "Temperature",
             slug: "temperature",
-            unit: "C",
+            unit: "°C",
             isSystem: true,
             value: "25° C",
             displayOrder: 7,
@@ -449,7 +449,7 @@ export const portfolioSeedTanks: PortfolioTankSeed[] = [
           {
             name: "Temperature",
             slug: "temperature",
-            unit: "C",
+            unit: "°C",
             isSystem: true,
             value: "25° C",
             displayOrder: 7,
@@ -652,7 +652,7 @@ export const portfolioSeedTanks: PortfolioTankSeed[] = [
           {
             name: "Temperature",
             slug: "temperature",
-            unit: "C",
+            unit: "°C",
             isSystem: true,
             value: "22",
             displayOrder: 6,
@@ -880,7 +880,7 @@ export const portfolioSeedTanks: PortfolioTankSeed[] = [
           {
             name: "Temperature",
             slug: "temperature",
-            unit: "C",
+            unit: "°C",
             isSystem: true,
             value: "22",
             displayOrder: 8,
@@ -1089,7 +1089,7 @@ export const portfolioSeedTanks: PortfolioTankSeed[] = [
           {
             name: "Temperature",
             slug: "temperature",
-            unit: "C",
+            unit: "°C",
             isSystem: true,
             value: "22",
             displayOrder: 8,

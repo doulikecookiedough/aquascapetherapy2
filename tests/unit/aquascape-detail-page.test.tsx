@@ -163,7 +163,7 @@ describe("Aquascape detail page", () => {
         id: "fact-type-2",
         name: "Temperature",
         slug: "temperature",
-        unit: "C",
+        unit: "°C",
         isSystem: true,
         isRepeatable: false,
         createdAt: new Date("2026-03-28T12:00:00.000Z"),

@@ -109,7 +109,7 @@ describe("aquascape fact mutations", () => {
       data: {
         name: "Temperature",
         slug: "temperature",
-        unit: "C",
+        unit: "°C",
         isSystem: true,
         isRepeatable: false,
       },

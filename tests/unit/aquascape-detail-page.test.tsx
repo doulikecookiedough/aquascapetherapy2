@@ -14,6 +14,7 @@ vi.mock("next/navigation", () => ({
 import AquascapeDetailPage from "../../app/(public)/aquascapes/[slug]/page";
 import { getAquascapeBySlug } from "../../server/queries/aquascapes";
 import { listFactTypes } from "../../server/queries/fact-types";
+import { listPlants } from "../../server/queries/plants";
 
 vi.mock("../../server/queries/aquascapes", () => ({
   getAquascapeBySlug: vi.fn(),
@@ -23,10 +24,15 @@ vi.mock("../../server/queries/fact-types", () => ({
   listFactTypes: vi.fn(),
 }));
 
+vi.mock("../../server/queries/plants", () => ({
+  listPlants: vi.fn(),
+}));
+
 describe("Aquascape detail page", () => {
   beforeEach(() => {
     vi.mocked(getAquascapeBySlug).mockReset();
     vi.mocked(listFactTypes).mockReset();
+    vi.mocked(listPlants).mockReset();
     notFound.mockClear();
   });
 
@@ -170,6 +176,18 @@ describe("Aquascape detail page", () => {
         updatedAt: new Date("2026-03-28T12:00:00.000Z"),
       },
     ]);
+    vi.mocked(listPlants).mockResolvedValue([
+      {
+        id: "plant-1",
+        name: "Java Fern",
+        slug: "java-fern",
+        scientificName: "Microsorum pteropus",
+        commonName: "Java Fern",
+        description: null,
+        createdAt: new Date("2026-03-28T12:00:00.000Z"),
+        updatedAt: new Date("2026-03-28T12:00:00.000Z"),
+      },
+    ]);
 
     render(
       await AquascapeDetailPage({
@@ -188,6 +206,9 @@ describe("Aquascape detail page", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Add Equipment" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Plant" }),
     ).toBeInTheDocument();
     expect(screen.getByText("ADA 120P")).toBeInTheDocument();
     expect(
@@ -235,6 +256,14 @@ describe("Aquascape detail page", () => {
     expect(screen.getByRole("textbox", { name: "Value" })).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Save Fact" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Plant" }));
+
+    expect(screen.getByRole("combobox", { name: "Plant" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Notes" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Save Plant" }),
     ).toBeInTheDocument();
   });
 
@@ -306,6 +335,7 @@ describe("Aquascape detail page", () => {
       ],
     });
     vi.mocked(listFactTypes).mockResolvedValue([]);
+    vi.mocked(listPlants).mockResolvedValue([]);
 
     render(
       await AquascapeDetailPage({
@@ -356,6 +386,7 @@ describe("Aquascape detail page", () => {
       facts: [],
     });
     vi.mocked(listFactTypes).mockResolvedValue([]);
+    vi.mocked(listPlants).mockResolvedValue([]);
 
     render(
       await AquascapeDetailPage({
@@ -374,6 +405,7 @@ describe("Aquascape detail page", () => {
   it("calls notFound when the aquascape slug is invalid", async () => {
     vi.mocked(getAquascapeBySlug).mockResolvedValue(null);
     vi.mocked(listFactTypes).mockResolvedValue([]);
+    vi.mocked(listPlants).mockResolvedValue([]);
 
     await expect(
       AquascapeDetailPage({

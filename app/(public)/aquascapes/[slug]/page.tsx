@@ -8,10 +8,13 @@ import {
   createAquascapeEquipmentAction,
   createAquascapeFactAction,
   createAquascapeImageAction,
+  createAquascapePlantAction,
 } from "@/app/(public)/aquascapes/[slug]/actions";
 import { AddImagePanel } from "@/app/(public)/aquascapes/[slug]/add-image-panel";
+import { AddPlantPanel } from "@/app/(public)/aquascapes/[slug]/add-plant-panel";
 import { getAquascapeBySlug } from "@/server/queries/aquascapes";
 import { listFactTypes } from "@/server/queries/fact-types";
+import { listPlants } from "@/server/queries/plants";
 
 type AquascapeDetailPageProps = {
   params: Promise<{
@@ -23,9 +26,10 @@ export default async function AquascapeDetailPage({
   params,
 }: AquascapeDetailPageProps) {
   const { slug } = await params;
-  const [aquascape, factTypes] = await Promise.all([
+  const [aquascape, factTypes, plants] = await Promise.all([
     getAquascapeBySlug(slug),
     listFactTypes(),
+    listPlants(),
   ]);
 
   if (!aquascape) {
@@ -86,6 +90,14 @@ export default async function AquascapeDetailPage({
           aquascapeId={aquascape.id}
           factTypes={factTypes}
           action={createAquascapeFactAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddPlantPanel
+          aquascapeId={aquascape.id}
+          plants={plants}
+          action={createAquascapePlantAction}
         />
       </div>
 

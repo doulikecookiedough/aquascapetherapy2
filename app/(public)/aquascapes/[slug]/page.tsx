@@ -3,9 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AddEquipmentPanel } from "@/app/(public)/aquascapes/[slug]/add-equipment-panel";
+import { AddFaunaPanel } from "@/app/(public)/aquascapes/[slug]/add-fauna-panel";
 import { AddFactPanel } from "@/app/(public)/aquascapes/[slug]/add-fact-panel";
 import {
   createAquascapeEquipmentAction,
+  createAquascapeFaunaAction,
   createAquascapeFactAction,
   createAquascapeImageAction,
   createAquascapePlantAction,
@@ -13,6 +15,7 @@ import {
 import { AddImagePanel } from "@/app/(public)/aquascapes/[slug]/add-image-panel";
 import { AddPlantPanel } from "@/app/(public)/aquascapes/[slug]/add-plant-panel";
 import { getAquascapeBySlug } from "@/server/queries/aquascapes";
+import { listFauna } from "@/server/queries/fauna";
 import { listFactTypes } from "@/server/queries/fact-types";
 import { listPlants } from "@/server/queries/plants";
 
@@ -26,10 +29,11 @@ export default async function AquascapeDetailPage({
   params,
 }: AquascapeDetailPageProps) {
   const { slug } = await params;
-  const [aquascape, factTypes, plants] = await Promise.all([
+  const [aquascape, factTypes, plants, fauna] = await Promise.all([
     getAquascapeBySlug(slug),
     listFactTypes(),
     listPlants(),
+    listFauna(),
   ]);
 
   if (!aquascape) {
@@ -98,6 +102,14 @@ export default async function AquascapeDetailPage({
           aquascapeId={aquascape.id}
           plants={plants}
           action={createAquascapePlantAction}
+        />
+      </div>
+
+      <div className="mt-8">
+        <AddFaunaPanel
+          aquascapeId={aquascape.id}
+          fauna={fauna}
+          action={createAquascapeFaunaAction}
         />
       </div>
 

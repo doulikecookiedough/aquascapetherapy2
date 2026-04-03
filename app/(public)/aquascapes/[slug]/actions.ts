@@ -2,10 +2,21 @@
 
 import { revalidatePath } from "next/cache";
 
+import { parseCreateAquascapeEquipmentFormData } from "@/lib/validations/aquascape-equipment";
 import { parseCreateAquascapeFactFormData } from "@/lib/validations/aquascape-fact";
 import { parseCreateAquascapeImageFormData } from "@/lib/validations/aquascape-image";
+import { createAquascapeEquipment } from "@/server/mutations/aquascape-equipment";
 import { createAquascapeFact } from "@/server/mutations/aquascape-facts";
 import { createAquascapeImage } from "@/server/mutations/aquascape-images";
+
+export async function createAquascapeEquipmentAction(formData: FormData) {
+  const input = parseCreateAquascapeEquipmentFormData(formData);
+  const result = await createAquascapeEquipment(input);
+
+  revalidatePath("/tanks");
+  revalidatePath(`/tanks/${result.tankId}`);
+  revalidatePath(`/aquascapes/${result.slug}`);
+}
 
 export async function createAquascapeFactAction(formData: FormData) {
   const input = parseCreateAquascapeFactFormData(formData);

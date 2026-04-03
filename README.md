@@ -4,10 +4,11 @@ A full-stack TypeScript application for documenting aquariums and aquascapes, pr
 
 ## What It Does
 
-- Public homepage with featured aquarium content
+- Public homepage with portfolio positioning and preview entry point
 - Aquarium collection page with latest-aquascape previews
 - Tank detail pages with the current aquascape and aquascape history
 - Aquascape journal pages with images, equipment, plants, fauna, and facts
+- Aquascape authoring from the tank detail page plus structured journal authoring on the aquascape page
 - Seeded portfolio content for real ADA 120P and ADA 150P layouts
 - Unit and integration test coverage with GitHub Actions CI
 
@@ -26,9 +27,10 @@ A full-stack TypeScript application for documenting aquariums and aquascapes, pr
 
 Current focus:
 
-- deploy the portfolio-facing read flow
-- improve authoring workflows, starting with aquascape creation from the tank detail page
-- continue refining the public UI without losing test coverage or incremental history
+- structured aquascape authoring is now in place on the aquascape journal page
+- prepare the app for first production deployment
+- refine aquascape authoring UX now that structured editing is in place
+- continue improving the visual presentation without losing test coverage or incremental history
 
 ## Quick Start
 
@@ -52,9 +54,13 @@ Then open:
 
 Current coverage includes:
 
+- shared navigation and homepage rendering
 - homepage rendering
 - aquarium collection rendering and latest-aquascape previews
 - tank detail and aquascape detail rendering
+- aquascape authoring entry from the tank detail page
+- image, fact, equipment, plant, and fauna authoring flows on the aquascape detail page
+- health route and validation coverage
 - empty-image and not-found behavior
 - Prisma-backed query and mutation integration tests
 - GitHub Actions CI validation

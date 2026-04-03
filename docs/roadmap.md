@@ -2,9 +2,12 @@
 
 ## Near-term
 
-- add aquascape authoring from the tank detail page
+- deploy the app to a first production environment
+- refine the aquascape detail page authoring UX
+- improve the visual design of the public portfolio and journal pages
+- replace large plant and fauna dropdowns with searchable pickers
+- support temperature unit selection and dual-unit display for temperature facts
 - support draft aquascapes before public publication
-- improve public gallery polish and responsive behavior
 - document and later enforce publishing rules for public aquascapes
 - add authentication so users can eventually manage and submit their own aquascapes
 

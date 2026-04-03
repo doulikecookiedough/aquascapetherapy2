@@ -35,10 +35,20 @@
 
 - create tanks
 - delete tanks
+- create aquascapes from the tank detail page
+- add aquascape images from the aquascape journal page
+- add aquascape facts from the aquascape journal page
+- add aquascape equipment from the aquascape journal page
+- link plants to aquascapes from the aquascape journal page
+- link fauna to aquascapes from the aquascape journal page
 
-Planned next:
+## Current modeling notes
 
-- add aquascape authoring from the tank detail flow
+- `FactType` supports repeatable fact types through `isRepeatable`
+- `Hardscape` and `Substrate` are modeled as repeatable fact types
+- repeatable facts are numbered at render time instead of encoding numbers into the fact type name
+- plants and fauna are selected from reusable catalog tables and attached through join records
+- image, plant, fauna, fact, and equipment writes all use owner-scoped mutation paths
 
 ## Seeded portfolio content
 

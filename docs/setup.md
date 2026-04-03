@@ -33,10 +33,17 @@ Open:
 
 Current read flow:
 
-- homepage with featured aquarium content
+- homepage with portfolio preview content
 - aquarium collection at `/tanks`
 - tank history pages at `/tanks/[tankId]`
 - aquascape journal pages at `/aquascapes/[slug]`
+
+Current write flow:
+
+- create tanks from `/tanks`
+- create aquascapes from `/tanks/[tankId]`
+- add images, facts, equipment, plants, and fauna from `/aquascapes/[slug]`
+- delete tanks from `/tanks`
 
 ## Useful scripts
 

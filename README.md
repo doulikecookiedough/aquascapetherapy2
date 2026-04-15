@@ -79,3 +79,4 @@ Detailed project documentation lives in `docs/`:
 - [Testing](/Users/doumok/Code/aquascapetherapy2/docs/testing.md)
 - [Data Model](/Users/doumok/Code/aquascapetherapy2/docs/data-model.md)
 - [Roadmap](/Users/doumok/Code/aquascapetherapy2/docs/roadmap.md)
+- [Agent Guide](/Users/doumok/Code/aquascapetherapy2/AGENT.md)

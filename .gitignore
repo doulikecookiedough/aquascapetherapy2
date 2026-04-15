@@ -47,3 +47,6 @@ temp-next-app/
 
 # generated Prisma client
 /prisma/generated
+
+# local editor settings
+.vscode/settings.json

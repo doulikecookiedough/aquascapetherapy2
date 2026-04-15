@@ -53,6 +53,13 @@ The goal is not to write long retrospectives. The goal is to help future readers
 - One logical change per commit whenever practical.
 - Avoid mixing refactors, behavior changes, and documentation updates unless they are tightly coupled.
 - Preserve a reviewable history that can be bisected or reverted safely.
+- Recommend commit messages in the format `area: change`.
+
+Examples:
+
+- `docs: add AGENT.md`
+- `tests: cover aquascape detail page`
+- `tanks: fix latest aquascape preview`
 
 If a task is too large for one clean commit, split it into a sequence of small commits with clear intent.
 

@@ -26,6 +26,10 @@ export const createAquascapeSchema = z.object({
   status: z.nativeEnum(AquascapeStatus),
 });
 
+export const deleteAquascapeSchema = z.object({
+  aquascapeId: z.string().cuid("Aquascape id is invalid."),
+});
+
 const createAquascapeFormSchema = z.object({
   tankId: z.string(),
   name: z.string(),
@@ -34,7 +38,12 @@ const createAquascapeFormSchema = z.object({
   status: z.string(),
 });
 
+const deleteAquascapeFormSchema = z.object({
+  aquascapeId: z.string(),
+});
+
 export type CreateAquascapeInput = z.infer<typeof createAquascapeSchema>;
+export type DeleteAquascapeInput = z.infer<typeof deleteAquascapeSchema>;
 
 export function parseCreateAquascapeFormData(
   formData: FormData,
@@ -51,4 +60,14 @@ export function parseCreateAquascapeFormData(
     ...rawInput,
     description: rawInput.description.trim() === "" ? null : rawInput.description,
   });
+}
+
+export function parseDeleteAquascapeFormData(
+  formData: FormData,
+): DeleteAquascapeInput {
+  const rawInput = deleteAquascapeFormSchema.parse({
+    aquascapeId: formData.get("aquascapeId"),
+  });
+
+  return deleteAquascapeSchema.parse(rawInput);
 }

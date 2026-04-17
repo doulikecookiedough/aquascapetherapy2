@@ -5,12 +5,14 @@ import { notFound } from "next/navigation";
 import { AddEquipmentPanel } from "@/app/(public)/aquascapes/[slug]/add-equipment-panel";
 import { AddFaunaPanel } from "@/app/(public)/aquascapes/[slug]/add-fauna-panel";
 import { AddFactPanel } from "@/app/(public)/aquascapes/[slug]/add-fact-panel";
+import { DeleteAquascapeButton } from "@/app/(public)/aquascapes/[slug]/delete-aquascape-button";
 import {
   createAquascapeEquipmentAction,
   createAquascapeFaunaAction,
   createAquascapeFactAction,
   createAquascapeImageAction,
   createAquascapePlantAction,
+  deleteAquascapeAction,
 } from "@/app/(public)/aquascapes/[slug]/actions";
 import { AddImagePanel } from "@/app/(public)/aquascapes/[slug]/add-image-panel";
 import { AddPlantPanel } from "@/app/(public)/aquascapes/[slug]/add-plant-panel";
@@ -72,6 +74,10 @@ export default async function AquascapeDetailPage({
               {aquascape.description}
             </p>
           ) : null}
+          <DeleteAquascapeButton
+            aquascapeId={aquascape.id}
+            action={deleteAquascapeAction}
+          />
         </div>
       </div>
 

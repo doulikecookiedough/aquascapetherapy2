@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/db";
 import {
   createAquascapeSchema,
+  deleteAquascapeSchema,
   type CreateAquascapeInput,
+  type DeleteAquascapeInput,
 } from "@/lib/validations/aquascape";
 import { getOrCreatePortfolioOwner } from "@/server/portfolio-owner";
 
@@ -47,4 +49,36 @@ export async function createAquascape(input: CreateAquascapeInput) {
       isPublic: data.status === "APPROVED",
     },
   });
+}
+
+export async function deleteAquascape(input: DeleteAquascapeInput) {
+  const owner = await getOrCreatePortfolioOwner();
+  const { aquascapeId } = deleteAquascapeSchema.parse(input);
+
+  const aquascape = await prisma.aquascape.findFirst({
+    where: {
+      id: aquascapeId,
+      tank: {
+        userId: owner.id,
+      },
+    },
+    select: {
+      id: true,
+      tankId: true,
+    },
+  });
+
+  if (!aquascape) {
+    throw new Error("Aquascape not found.");
+  }
+
+  await prisma.aquascape.delete({
+    where: {
+      id: aquascape.id,
+    },
+  });
+
+  return {
+    tankId: aquascape.tankId,
+  };
 }

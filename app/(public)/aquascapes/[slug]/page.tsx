@@ -11,6 +11,7 @@ import {
   createAquascapeFactAction,
   createAquascapeImageAction,
   createAquascapePlantAction,
+  deleteAquascapeAction,
 } from "@/app/(public)/aquascapes/[slug]/actions";
 import { AddImagePanel } from "@/app/(public)/aquascapes/[slug]/add-image-panel";
 import { AddPlantPanel } from "@/app/(public)/aquascapes/[slug]/add-plant-panel";
@@ -72,6 +73,15 @@ export default async function AquascapeDetailPage({
               {aquascape.description}
             </p>
           ) : null}
+          <form action={deleteAquascapeAction}>
+            <input type="hidden" name="aquascapeId" value={aquascape.id} />
+            <button
+              className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
+              type="submit"
+            >
+              Delete Aquascape
+            </button>
+          </form>
         </div>
       </div>
 

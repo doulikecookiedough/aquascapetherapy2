@@ -1,14 +1,16 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { notFound } = vi.hoisted(() => ({
+const { notFound, redirect } = vi.hoisted(() => ({
   notFound: vi.fn(() => {
     throw new Error("NEXT_NOT_FOUND");
   }),
+  redirect: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
   notFound,
+  redirect,
 }));
 
 import AquascapeDetailPage from "../../app/(public)/aquascapes/[slug]/page";
@@ -219,6 +221,9 @@ describe("Aquascape detail page", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Add Image" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Delete Aquascape" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Add Equipment" }),

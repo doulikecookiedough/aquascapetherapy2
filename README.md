@@ -36,6 +36,8 @@ Current focus:
 
 ```bash
 npm install
+cp .env.example .env
+cp .env.test.example .env.test
 docker compose up -d
 npm run prisma:migrate
 npm run prisma:migrate:test

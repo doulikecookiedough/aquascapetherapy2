@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { AddEquipmentPanel } from "@/app/(public)/aquascapes/[slug]/add-equipment-panel";
 import { AddFaunaPanel } from "@/app/(public)/aquascapes/[slug]/add-fauna-panel";
 import { AddFactPanel } from "@/app/(public)/aquascapes/[slug]/add-fact-panel";
+import { DeleteAquascapeButton } from "@/app/(public)/aquascapes/[slug]/delete-aquascape-button";
 import {
   createAquascapeEquipmentAction,
   createAquascapeFaunaAction,
@@ -73,15 +74,10 @@ export default async function AquascapeDetailPage({
               {aquascape.description}
             </p>
           ) : null}
-          <form action={deleteAquascapeAction}>
-            <input type="hidden" name="aquascapeId" value={aquascape.id} />
-            <button
-              className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-black/5"
-              type="submit"
-            >
-              Delete Aquascape
-            </button>
-          </form>
+          <DeleteAquascapeButton
+            aquascapeId={aquascape.id}
+            action={deleteAquascapeAction}
+          />
         </div>
       </div>
 

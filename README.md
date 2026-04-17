@@ -36,13 +36,17 @@ Current focus:
 
 ```bash
 npm install
+# Copy .env files which map to the default setting
 cp .env.example .env
 cp .env.test.example .env.test
 docker compose up -d
+# Setup Postgres DB
 npm run prisma:migrate
 npm run prisma:migrate:test
+# Add seed data
 npm run prisma:generate
 npm run prisma:seed
+# Start development server
 npm run dev
 ```
 
